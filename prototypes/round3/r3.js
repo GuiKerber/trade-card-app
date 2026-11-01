@@ -3,7 +3,7 @@ const R3_PAGES = [[1, 2, 3, 4, 5, 6, 7, 8, 9], [25, 26, 35, 39, 52, 54, 92, 93, 
 const BOLT = '<svg viewBox="0 0 24 24" width="100%" height="100%" aria-hidden="true"><path d="M13.6 2.5 4.8 13.6h6.1l-1.2 7.9 8.9-11.3h-6.1l1.1-7.7z" fill="currentColor"/></svg>';
 
 const R3_COVERS = {
-  // Opção 1: fichário de zíper amarelo com blocos de cor, tudo chapado
+  // Opção 1: fichário amarelo com blocos de cor, tudo chapado
   flat: () => `
     <div class="face r3a-cf">
       <i class="r3a-blk" style="--c:#4DA2FF;left:-96px;top:-84px"></i>
@@ -11,10 +11,11 @@ const R3_COVERS = {
       <i class="r3a-blk" style="--c:#55DB9C;left:-110px;top:300px"></i>
       <i class="r3a-blk" style="--c:#5C4ADE;left:226px;top:318px"></i>
       <span class="r3a-badge">${BOLT}</span>
-      <i class="r3a-zip"></i><i class="r3a-pull"></i>
+      <i class="r3a-stitch"></i>
       <span class="r3a-name">da Lia</span>
       <span class="cstk r3a-stk" style="left:44px;top:206px;--r:-12deg">${sticker('sonho', 46, '#E9CCFF')}</span>
       <div class="r3a-prog"><b data-owned>${ownedCount()}</b><span>de ${total()}</span></div>
+      <i class="v1-strap r3a-strap"></i>
     </div>
     <div class="face r3a-ci"><div class="v1-plate"><small>Este álbum é da</small><b>Lia</b></div></div>`,
   // Opção 2: o mesmo fichário inflável da variação 1
@@ -32,14 +33,14 @@ const R3_COVERS = {
       <i class="v1-strap"></i>
     </div>
     <div class="face v1-ci"><i class="grain"></i><i class="stitch"></i><div class="v1-plate"><small>Este álbum é da</small><b>Lia</b></div></div>`,
-  // Opção 3: fichário de zíper em foil holográfico com emblema em baixo-relevo
+  // Opção 3: fichário em foil holográfico com emblema em baixo-relevo
   holo: () => `
     <div class="face r3c-cf">
       <i class="r3c-foil"></i><i class="r3c-lines"></i><i class="r3c-glitter"></i><i class="r3c-glare"></i>
-      <i class="r3c-zip"></i><i class="r3c-pull"></i>
+      <i class="r3c-stitch"></i>
       <div class="r3c-ball"><i class="r3c-top"></i><i class="r3c-band"></i><i class="r3c-btn"></i></div>
       <div class="r3c-word">MEU ÁLBUM</div>
-      <span class="r3c-stk" style="left:252px;top:330px;--r:12deg">${sticker('eletrico', 54, '#FFD731')}<i class="r3c-stk-foil"></i></span>
+      <span class="r3c-stk" style="left:234px;top:330px;--r:12deg">${sticker('eletrico', 54, '#FFD731')}<i class="r3c-stk-foil"></i></span>
       <span class="r3c-stk" style="left:46px;top:336px;--r:-10deg">${sticker('sonho', 46, '#E9CCFF')}<i class="r3c-stk-foil"></i></span>
       <div class="r3c-prog"><b data-owned>${ownedCount()}</b> de ${total()}</div>
     </div>
@@ -54,7 +55,6 @@ function mountBinder(stage, api, o) {
   const pocket = c => `<button class="pk pk1" data-n="${c.n}" aria-label="${aria(c)}"><span class="anchor" style="${jitStyle(c)}">${c.have ? cardHTML(c) : ph(c)}</span><i class="sleeve"></i>${badges(c)}</button>`;
   stage.innerHTML = `
     <div class="book v1-book" id="book">
-      <i class="r3-strap"></i>
       <div class="v1-back"><i class="grain"></i></div>
       <div class="v1-spine"></div>
       <div class="v1-leaves flip-host" id="leaves"></div>
@@ -67,7 +67,7 @@ function mountBinder(stage, api, o) {
       <div class="pagepill">Folha <b id="pgN">1</b> de ${NP}</div>
       <button class="rbtn" data-go="1" aria-label="Próxima folha">${ico('chevR', 28)}</button>
     </div>`;
-  const book = $('#book', stage), coverEl = $('#cover', stage), hint = $('#hint', stage), ctrls = $('#ctrls', stage), leavesEl = $('#leaves', stage);
+  const book = $('#book', stage), coverEl = $('#cover', stage), hint = $('#hint', stage), ctrls = $('#ctrls', stage), leavesEl = $('#leaves', stage), rings = $('.v1-rings', stage);
   const leafHTML = i => {
     const cs = R3_PAGES[i].map(byN);
     return `<div class="v1-leaf"><i class="grain"></i>${[18, 50, 82].map(t => `<i class="hole" style="top:${t}%"></i>`).join('')}<div class="v1-grid">${cs.map(pocket).join('')}</div>${pageDone(cs) ? stampHTML('v1-stamp') : ''}</div>`;
@@ -77,7 +77,7 @@ function mountBinder(stage, api, o) {
   const fl = makeFlipper({ host: leavesEl, count: NP, render: leafHTML, back: '<div class="v1-lb"></div>', enabled: () => ctl.st.open,
     onChange: i => { $('#pgN', stage).textContent = i + 1; api.setTitle(`Folha ${i + 1} de ${NP}`); updCtrls(); } });
   ctl = bookCtl({ book, cover: coverEl, C, O,
-    onP: p => { hint.style.opacity = clamp(1 - p * 2.5, 0, 1); ctrls.style.opacity = clamp(p * 1.6 - .6, 0, 1); ctrls.style.pointerEvents = p > .9 ? 'auto' : 'none'; },
+    onP: p => { rings.style.opacity = clamp(p * 3 - 1, 0, 1); hint.style.opacity = clamp(1 - p * 2.5, 0, 1); ctrls.style.opacity = clamp(p * 1.6 - .6, 0, 1); ctrls.style.pointerEvents = p > .9 ? 'auto' : 'none'; },
     onOpenStart: () => { coverEl.classList.add('strap-off'); buzz(10); },
     onOpened: () => api.setOpen(true, `Folha ${fl.cur + 1} de ${NP}`),
     onCloseStart: () => api.setOpen(false),
@@ -123,9 +123,9 @@ function mountBinder(stage, api, o) {
 
 const R3_CONS = 'As fotos das cartas dependem de liberar o domínio de imagens. Enquanto isso, cada bolso mostra a moldura com nome e número reais.';
 VARIANTS.r3a = { round: 3, num: '1', short: 'Chapado', hash: 'chapado', skin: 'r1', mount: (s, a) => mountBinder(s, a, { cls: 'r3a', cover: 'flat' }), notes: {
-  title: 'Mesma interface, álbum chapado', tag: 'Fichário de zíper amarelo · cores sólidas e contorno preto',
-  concept: 'A interface fica igual à da variação 1 e o álbum passa a falar a mesma língua: cores sólidas, contorno preto e volume dado por um degrau sólido, sem gradiente nem sombra borrada. A capa é uma versão mínima dos fichários de zíper com blocos de cor e um selo de energia no centro, como o amarelo da sua referência.',
-  refs: 'Fichários de zíper de 4 e 9 bolsos com alça de pulso (como os da sua imagem) e a estética de adesivo da variação 1.',
+  title: 'Mesma interface, álbum chapado', tag: 'Fichário amarelo com elástico · cores sólidas e contorno preto',
+  concept: 'A interface fica igual à da variação 1 e o álbum passa a falar a mesma língua: cores sólidas, contorno preto e volume dado por um degrau sólido, sem gradiente nem sombra borrada. A capa é uma versão mínima do fichário amarelo da sua referência, com blocos de cor e um selo de energia no centro, fechada por elástico como na variação 1.',
+  refs: 'Fichários de 9 bolsos com blocos de cor (como o amarelo da sua imagem) e a estética de adesivo da variação 1.',
   try: ['Toque ou arraste a capa.', 'Toque numa carta para ver o anúncio completo: coleção e número, raridade, variante, condição e idioma.', 'Toque no bolso da <b>Venusaur ex</b> (003/165), diga como a carta está e veja a folha 1 completar.'],
   m3: ['Top app bar', 'Navigation bar', 'Assist chip', 'Modal bottom sheet com anúncio', 'Seleção de condição'],
   pros: 'Interface e álbum finalmente coerentes. É a opção mais barata de produzir e a mais legível.',
@@ -139,7 +139,7 @@ VARIANTS.r3b = { round: 3, num: '2', short: 'Vinil', hash: 'vinil', skin: 'r3b',
   pros: 'Mantém a capa que você mais gostou e deixa tudo mais "fofinho".',
   cons: 'Gradiente pede mais cuidado no Android (estados, modo escuro). ' + R3_CONS } };
 VARIANTS.r3c = { round: 3, num: '3', short: 'Holo', hash: 'holo', skin: 'r3c', mount: (s, a) => mountBinder(s, a, { cls: 'r3c', cover: 'holo' }), notes: {
-  title: 'Holográfico', tag: 'Fichário de zíper em foil · interface perolada',
+  title: 'Holográfico', tag: 'Fichário em foil holográfico · interface perolada',
   concept: 'Uma combinação nova a partir do brilho das cartas raras. A capa é foil holográfico com textura de linhas e glitter, que muda de cor quando o dedo passa por cima. No centro há um emblema mínimo em baixo-relevo, inspirado nos fichários de Poké Ball. A interface é perolada, com o mesmo arco-íris só nos detalhes: indicador da navegação, aro do avatar, borda do sheet e adesivos holo.',
   refs: 'Fichários de Poké Ball (sua referência), o foil das cartas Rara Dupla e Ilustração Rara da coleção 151 e o brilho por inclinação do TCG Pocket.',
   try: ['Passe o dedo sobre a capa: o foil e os adesivos holo mudam de cor.', 'Abra e toque numa carta Rara Dupla (Charizard ex, 006/165).', 'Guarde a <b>Venusaur ex</b> e escolha a condição.'],
