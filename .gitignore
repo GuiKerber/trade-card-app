@@ -13,3 +13,4 @@ android/
 *.p12
 *.key
 *.mobileprovision
+prototypes/round3/cards/

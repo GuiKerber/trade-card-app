@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Álbum com cartas reais</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Fredoka:wght@500;600&family=Nunito:wght@600;700;800;900&display=swap">
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="album.css">
+<link rel="stylesheet" href="r3.css">
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="headline" id="headline">
+      <h1>Álbum e interface no mesmo tom</h1>
+      <p class="lede">Três combinações a partir do fichário que você escolheu, agora com cartas reais da coleção 151. Toque numa carta para ver o anúncio completo, como nos marketplaces.</p>
+    </div>
+    <div class="segs" id="segs"></div>
+  </header>
+
+  <main class="stagegrid">
+    <div class="device-slot" id="slot">
+      <div class="device" id="device">
+        <div class="screen" id="screen"></div>
+      </div>
+    </div>
+    <aside class="notes" id="notes" aria-live="polite"></aside>
+  </main>
+
+  <footer class="foot">
+    <p>Dados das cartas: coleção 151 (Escarlate e Violeta), do conjunto aberto PokemonTCG/pokemon-tcg-data. Pokémon e as imagens das cartas pertencem à Nintendo, Creatures e GAME FREAK; o app final precisa de licença ou de uma fonte autorizada de imagens.</p>
+    <button class="btn-reset" id="reset" type="button">Restaurar o exemplo</button>
+  </footer>
+</div>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <linearGradient id="metal" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset=".45" stop-color="#bcc4d0"/>
+      <stop offset=".6" stop-color="#7d8796"/>
+      <stop offset="1" stop-color="#e9eef4"/>
+    </linearGradient>
+  </defs>
+</svg>
+
+<script src="core.js"></script>
+<script src="r3-cards.js"></script>
+<script src="r3-data.js"></script>
+<script src="r3.js"></script>
+<script src="r3-app.js"></script>
+</body>
+</html>
