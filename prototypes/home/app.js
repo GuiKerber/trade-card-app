@@ -51,6 +51,7 @@ VARIANTS.v3 = { round: 1, num: '3', short: 'Zíper', hash: 'ziper', mount: mount
   }
   function renderAppbar() {
     const ab = $('#appbar', screen); if (!ab) return;
+    screen.style.setProperty('--own', ownedCount() / 24);
     const chip = `<div class="count" id="count" aria-label="${ownedCount()} de 24 cartas">${ico('cards', 22)}<b>${ownedCount()}</b>/24</div>`;
     ab.innerHTML = S.open
       ? `<button class="icon-btn" id="abBack" aria-label="Fechar o álbum">${ico('back', 24)}</button><div class="ab-title">${S.title}</div>${chip}`

@@ -274,10 +274,10 @@ function makeFlipper({ host, count, render, back, enabled, onChange, axis = 'Y' 
 }
 
 /* ---------- Abrir / fechar: capa gira na lombada e o álbum cresce ---------- */
-function bookCtl({ book, cover, C, O, onP, onOpenStart, onOpened, onCloseStart, onClosed, coverSpring = M.slowSpatial }) {
+function bookCtl({ book, cover, C, O, onP, onOpenStart, onOpened, onCloseStart, onClosed, coverSpring = M.slowSpatial, axis = 'Y' }) {
   const st = { a: 0, p: 0, open: false, busy: false };
   const setP = p => { st.p = p; book.style.transform = `translate(${lerp(C.x, O.x, p)}px,${lerp(C.y, O.y, p)}px) scale(${lerp(C.s, O.s, p)})`; onP && onP(p); };
-  const setA = a => { st.a = a; cover.style.transform = `rotateY(${a}deg)`; };
+  const setA = a => { st.a = a; cover.style.transform = axis === 'Y' ? `rotateY(${a}deg)` : `rotateX(${-a}deg)`; };
   function open(v0 = 0) {
     if (st.busy || st.open) return;
     st.busy = true; onOpenStart && onOpenStart(); cover.style.visibility = 'visible';
