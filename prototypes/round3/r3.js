@@ -2,6 +2,7 @@
 const R3_PAGES = [[1, 2, 3, 4, 5, 6, 7, 8, 9], [25, 26, 35, 39, 52, 54, 92, 93, 94], [129, 133, 143, 150, 151, 166, 168, 170, 199]];
 const BOLT = '<svg viewBox="0 0 24 24" width="100%" height="100%" aria-hidden="true"><path d="M13.6 2.5 4.8 13.6h6.1l-1.2 7.9 8.9-11.3h-6.1l1.1-7.7z" fill="currentColor"/></svg>';
 
+const R3_BALL = `<svg viewBox="0 0 200 200" width="100%" height="100%" aria-hidden="true"><path d="M19 100A81 81 0 0 1 181 100H134A35 35 0 0 0 66 100Z" fill="#ff4670" opacity=".16"/><g fill="#fff" opacity=".85" transform="translate(0 1.8)"><path fill-rule="evenodd" d="M12 100a88 88 0 1 0 176 0a88 88 0 1 0-176 0ZM19 100a81 81 0 1 0 162 0a81 81 0 1 0-162 0Z"/><rect x="15" y="94" width="53" height="12"/><rect x="132" y="94" width="53" height="12"/><path fill-rule="evenodd" d="M65 100a35 35 0 1 0 70 0a35 35 0 1 0-70 0ZM74 100a26 26 0 1 0 52 0a26 26 0 1 0-52 0Z"/></g><g fill="#17141f" opacity=".2"><path fill-rule="evenodd" d="M12 100a88 88 0 1 0 176 0a88 88 0 1 0-176 0ZM19 100a81 81 0 1 0 162 0a81 81 0 1 0-162 0Z"/><rect x="15" y="94" width="53" height="12"/><rect x="132" y="94" width="53" height="12"/><path fill-rule="evenodd" d="M65 100a35 35 0 1 0 70 0a35 35 0 1 0-70 0ZM74 100a26 26 0 1 0 52 0a26 26 0 1 0-52 0Z"/></g><circle cx="100" cy="100" r="19" fill="#fff" opacity=".5"/><circle cx="100" cy="100" r="19" fill="none" stroke="#17141f" stroke-opacity=".18" stroke-width="2"/><path d="M88 94a14 14 0 0 1 18-7" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".9"/></svg>`;
 const R3_COVERS = {
   // Opção 1: fichário amarelo com blocos de cor, tudo chapado
   flat: () => `
@@ -38,7 +39,7 @@ const R3_COVERS = {
     <div class="face r3c-cf">
       <i class="r3c-foil"></i><i class="r3c-lines"></i><i class="r3c-glitter"></i><i class="r3c-glare"></i>
       <i class="r3c-stitch"></i>
-      <div class="r3c-ball"><i class="r3c-top"></i><i class="r3c-band"></i><i class="r3c-btn"></i></div>
+      <div class="r3c-ball">${R3_BALL}</div>
       <div class="r3c-word">MEU ÁLBUM</div>
       <span class="r3c-stk" style="left:234px;top:330px;--r:12deg">${sticker('eletrico', 54, '#FFD731')}<i class="r3c-stk-foil"></i></span>
       <span class="r3c-stk" style="left:46px;top:336px;--r:-10deg">${sticker('sonho', 46, '#E9CCFF')}<i class="r3c-stk-foil"></i></span>

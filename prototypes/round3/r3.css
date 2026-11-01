@@ -134,13 +134,64 @@
 .r3c-glitter { position: absolute; inset: 0; background-image: radial-gradient(circle, rgba(255, 255, 255, .95) 0 .8px, transparent 1.4px), radial-gradient(circle, rgba(255, 255, 255, .7) 0 .6px, transparent 1.2px); background-size: 23px 19px, 31px 27px; background-position: 0 0, 11px 7px; opacity: .8; }
 .r3c-glare { position: absolute; inset: -20%; background: radial-gradient(circle at var(--hx, 40%) var(--hy, 30%), rgba(255, 255, 255, .75), transparent 32%); mix-blend-mode: soft-light; pointer-events: none; }
 .r3c-stitch { position: absolute; inset: 14px 14px 14px 10px; border: 2px dashed rgba(255, 255, 255, .75); border-left: 0; border-radius: 0 20px 20px 0; pointer-events: none; }
-.r3c-ball { position: absolute; left: 77px; top: 92px; width: 176px; height: 176px; border-radius: 50%; overflow: hidden; box-shadow: inset 5px 7px 12px rgba(30, 20, 60, .28), inset -4px -5px 10px rgba(255, 255, 255, .85), 0 1px 0 rgba(255, 255, 255, .7); }
-.r3c-top { position: absolute; left: 0; right: 0; top: 0; height: 50%; background: rgba(255, 70, 110, .2); mix-blend-mode: multiply; }
-.r3c-band { position: absolute; left: 0; right: 0; top: calc(50% - 8px); height: 16px; background: rgba(23, 20, 31, .14); box-shadow: inset 0 3px 4px rgba(30, 20, 60, .3), inset 0 -2px 2px rgba(255, 255, 255, .7); }
-.r3c-btn { position: absolute; left: calc(50% - 30px); top: calc(50% - 30px); width: 60px; height: 60px; border-radius: 50%; background: rgba(255, 255, 255, .45); box-shadow: 0 0 0 8px rgba(23, 20, 31, .14), inset 3px 4px 6px rgba(30, 20, 60, .25), inset -2px -3px 4px rgba(255, 255, 255, .9); }
+.r3c-ball { position: absolute; left: 77px; top: 92px; width: 176px; height: 176px; }
 .r3c-word { position: absolute; left: 0; right: 0; top: 296px; text-align: center; font: 600 24px/1 "Fredoka", var(--display); letter-spacing: .22em; color: rgba(23, 20, 31, .62); text-shadow: 0 1px 0 rgba(255, 255, 255, .8); }
 .r3c-stk { position: absolute; transform: rotate(var(--r)); filter: drop-shadow(0 3px 2px rgba(30, 20, 60, .3)); }
 .r3c-stk-foil { position: absolute; inset: 14%; border-radius: 30%; background: linear-gradient(115deg, #ff9ec7, #ffd36e, #8ef0c3, #8cc7ff, #c3a6ff); background-size: 300% 300%; background-position: var(--hx, 40%) var(--hy, 40%); mix-blend-mode: color-dodge; opacity: .55; pointer-events: none; }
 .r3c-prog { position: absolute; left: 50%; top: 386px; transform: translateX(-50%); padding: 8px 16px; border-radius: 999px; background: #17141f; color: #fff; font: 600 16px/1 "Fredoka", var(--ui); white-space: nowrap; }
 .r3c-prog b { font-weight: 600; }
 .r3c-ci { transform: rotateY(180deg); border-radius: 30px 0 0 30px; background: #1d1a26; }
+
+/* ===== Explorações de barra de navegação (combinam com qualquer uma das três opções) ===== */
+.skin-r1 { --nb-bg: #fff; --nb-border: 2px solid #000; --nb-shadow: 0 4px 0 #000; --nb-ind: var(--lavanda); --nb-ind-border: 2px solid #000; --nb-ind-shadow: 0 2px 0 #000;
+  --nb-hero: #ffd731; --nb-hero-spine: #e8b900; --nb-hero-border: 3px solid #000; --nb-hero-shadow: 0 5px 0 #000; --nb-rail: #000; --nb-t1: #ffd731; --nb-t2: #55db9c; --nb-t3: #e9ccff; --nb-tab-border: 2px solid #000; --nb-stk-ring: 0 0 0 4px #fff, 0 0 0 6.5px #000; }
+.skin-r3b { --nb-bg: linear-gradient(180deg, #fff, #eef5ff); --nb-border: 2px solid #000; --nb-shadow: 0 4px 0 #1d2b5a, 0 12px 22px -12px rgba(29, 43, 90, .45); --nb-ind: linear-gradient(180deg, #f6ebff, #dcbcff); --nb-ind-border: 2px solid #000; --nb-ind-shadow: 0 2px 0 #2a1a7a, inset 0 2px 0 rgba(255, 255, 255, .8);
+  --nb-hero: radial-gradient(130% 90% at 30% 15%, #a8d4ff, #4da2ff 55%, #2b6fcb); --nb-hero-spine: linear-gradient(90deg, #1f63c0, #6db5ff 45%, #2366c4); --nb-hero-border: 2px solid #000; --nb-hero-shadow: 0 5px 0 #1d2b5a, inset 4px 5px 10px rgba(255, 255, 255, .35);
+  --nb-rail: linear-gradient(180deg, #2c2f45, #0d0e18); --nb-t1: linear-gradient(180deg, #ffe680, #ffd731); --nb-t2: linear-gradient(180deg, #a3f2cb, #55db9c); --nb-t3: linear-gradient(180deg, #f6ebff, #e2c3ff); --nb-tab-border: 2px solid #000; --nb-stk-ring: 0 0 0 4px #fff, 0 0 0 6.5px #000; }
+.skin-r3c { --nb-bg: rgba(255, 255, 255, .92); --nb-border: 1px solid rgba(23, 20, 31, .06); --nb-shadow: 0 14px 30px -12px rgba(40, 20, 80, .35); --nb-ind: var(--holo); --nb-ind-border: 0; --nb-ind-shadow: 0 4px 12px -4px rgba(140, 100, 220, .6);
+  --nb-hero: linear-gradient(115deg, #ffd6e8, #fff3c4 25%, #c9f7e3 50%, #cfe6ff 75%, #e6d4ff); --nb-hero-spine: linear-gradient(90deg, #0f0d15, #3a3546 45%, #1d1a26); --nb-hero-border: 3px solid #fff; --nb-hero-shadow: 0 10px 22px -8px rgba(40, 20, 80, .5);
+  --nb-rail: #17141f; --nb-t1: linear-gradient(160deg, #fff3c4, #ffd6e8); --nb-t2: linear-gradient(160deg, #c9f7e3, #cfe6ff); --nb-t3: linear-gradient(160deg, #e6d4ff, #ffd6e8); --nb-tab-border: 0; --nb-stk-ring: 0 0 0 4px #fff, 0 8px 16px -6px rgba(40, 20, 80, .45); }
+
+/* 2 · Pílula flutuante (M3 Expressive): a barra se solta da borda e o item ativo se abre */
+.screen.nb-pilula .navbar { background: transparent; border: 0; box-shadow: none; display: flex; justify-content: center; gap: 4px; padding: 10px 22px 0; }
+.screen.nb-pilula .navbar::before { content: ""; position: absolute; left: 18px; right: 18px; top: 6px; height: 66px; border-radius: 999px; background: var(--nb-bg); border: var(--nb-border); box-shadow: var(--nb-shadow); }
+.screen.nb-pilula .nav-item { position: relative; flex-direction: row; gap: 7px; height: 54px; padding: 0 12px; border-radius: 999px; border: 2px solid transparent; }
+.screen.nb-pilula .nav-item.active { background: var(--nb-ind); border: var(--nb-ind-border); box-shadow: var(--nb-ind-shadow); }
+.screen.nb-pilula .nav-item .nav-ind { width: auto; height: auto; background: none; border: 0; box-shadow: none; }
+.screen.nb-pilula .nav-lb { font-size: 15px; }
+.screen.nb-pilula .gesture { background: transparent; }
+
+/* 3 · Álbum no centro: o destino principal vira um mini fichário que salta da barra */
+.screen.nb-centro .navbar { grid-template-columns: 1fr 116px 1fr; overflow: visible; }
+.screen.nb-centro .nav-item:nth-child(1) { order: 2; }
+.screen.nb-centro .nav-item:nth-child(2) { order: 1; }
+.screen.nb-centro .nav-item:nth-child(3) { order: 3; }
+.screen.nb-centro .nav-item:nth-child(1) .nav-ind { width: 66px; height: 76px; margin-top: -40px; margin-bottom: 6px; border-radius: 10px 18px 18px 10px; background: var(--nb-hero); border: var(--nb-hero-border); box-shadow: var(--nb-hero-shadow); color: #000; overflow: hidden; }
+.screen.nb-centro .nav-item:nth-child(1) .nav-ind::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 13px; background: var(--nb-hero-spine); border-right: 2px solid rgba(0, 0, 0, .55); }
+.screen.nb-centro .nav-item:nth-child(1) .nav-ind svg { width: 30px; height: 30px; margin-left: 10px; }
+.screen.nb-centro .nav-item:nth-child(1).active .nav-ind { transform: rotate(-3deg); }
+.skin-r3c.nb-centro .nav-item:nth-child(1) .nav-ind { border-radius: 10px 18px 18px 10px; }
+
+/* 4 · Abas de fichário: cada destino é uma aba de divisória; a ativa sobe */
+.screen.nb-abas .navbar { background: transparent; border: 0; box-shadow: none; align-items: end; padding: 0 12px; gap: 8px; }
+.screen.nb-abas .navbar::before { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 10px; background: var(--nb-rail); }
+.screen.nb-abas .nav-item { position: relative; height: 66px; justify-content: flex-start; padding-top: 9px; border-radius: 20px 20px 0 0; border: var(--nb-tab-border); border-bottom: 0; transform: translateY(6px); transition: transform .3s cubic-bezier(.3, 1.5, .5, 1); }
+.screen.nb-abas .nav-item:nth-child(1) { background: var(--nb-t1); }
+.screen.nb-abas .nav-item:nth-child(2) { background: var(--nb-t2); }
+.screen.nb-abas .nav-item:nth-child(3) { background: var(--nb-t3); }
+.screen.nb-abas .nav-item.active { transform: translateY(-2px); height: 72px; z-index: 1; }
+.screen.nb-abas .nav-item .nav-ind { height: 30px; background: none; border: 0; box-shadow: none; }
+.screen.nb-abas .gesture { background: var(--nb-rail); }
+.screen.nb-abas .gesture i { background: #fff; }
+
+/* 5 · Adesivos: sem barra; três adesivos recortados, o ativo cresce e endireita */
+.screen.nb-adesivo .navbar { background: transparent; border: 0; box-shadow: none; padding-top: 4px; }
+.screen.nb-adesivo .navbar::before { display: none; }
+.screen.nb-adesivo .nav-item .nav-ind { width: 56px; height: 56px; border-radius: 50%; border: 3px solid #000; box-shadow: var(--nb-stk-ring); transform: rotate(var(--r)); transition: transform .35s cubic-bezier(.3, 1.6, .5, 1); }
+.skin-r3c.nb-adesivo .nav-item .nav-ind { border: 0; }
+.screen.nb-adesivo .nav-item:nth-child(1) .nav-ind { background: var(--nb-t1); --r: -8deg; }
+.screen.nb-adesivo .nav-item:nth-child(2) .nav-ind { background: var(--nb-t2); --r: 6deg; }
+.screen.nb-adesivo .nav-item:nth-child(3) .nav-ind { background: var(--nb-t3); --r: -5deg; }
+.screen.nb-adesivo .nav-item.active .nav-ind { transform: rotate(0deg) scale(1.14); }
+.screen.nb-adesivo .nav-lb { margin-top: 6px; }
+.screen.nb-adesivo .gesture { background: transparent; }

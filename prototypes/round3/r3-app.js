@@ -1,14 +1,21 @@
 /* App da rodada 3: tela Android, carta ampliada, anúncio no formato de marketplace, celebração */
 (() => {
   const screen = $('#screen'), device = $('#device'), slot = $('#slot');
-  const S = { v: 'r3a', ctrl: null, open: false, title: '', D: null, snackT: 0, lang: 'PT' };
+  const S = { v: 'r3a', ctrl: null, open: false, title: '', D: null, snackT: 0, lang: 'PT', nb: 'padrao' };
+  const NAVBARS = {
+    padrao: { label: 'Padrão', title: 'Barra padrão do Material 3', text: 'Barra fixa embaixo, com ícone e rótulo em cada destino e uma pílula no item ativo. É o que a criança já viu em outros apps.', pros: 'Previsível e fácil de implementar com o componente do Material.', cons: 'Neutra: não conversa com o álbum.' },
+    pilula: { label: 'Pílula', title: 'Pílula flutuante', text: 'A barra se solta das bordas e flutua sobre o fundo, como a navegação flexível do Material 3 Expressive. O item ativo vira uma pílula com o rótulo ao lado do ícone.', pros: 'Leve, moderna e deixa o fundo respirar em volta do álbum.', cons: 'Com 3 rótulos fica justa em telas de 360dp; com 4 destinos não cabe.' },
+    centro: { label: 'Centro', title: 'Álbum no centro', text: 'O destino principal vira um mini fichário que salta para fora da barra, entre Amigos e Trocas. A criança encontra o álbum de qualquer tela.', pros: 'Deixa claro que o álbum é o coração do app e já é um ícone de marca pronto.', cons: 'Foge do padrão do Material, então os estados de foco e toque precisam de cuidado.' },
+    abas: { label: 'Abas', title: 'Abas de fichário', text: 'Cada destino é uma aba colorida de divisória, saindo de um trilho escuro. A aba ativa sobe, como quando a gente puxa uma divisória.', pros: 'Continua a metáfora do álbum e a cor de cada aba ajuda quem ainda não lê.', cons: 'Ocupa mais altura, e as cores precisam combinar com cada capa.' },
+    adesivo: { label: 'Adesivos', title: 'Adesivos', text: 'Sem barra: três adesivos recortados flutuam no pé da tela. O ativo cresce e fica reto. Os adesivos podem trocar conforme a criança desbloqueia ou compra pacotes.', pros: 'É a opção mais lúdica e abre espaço para vender adesivos depois.', cons: 'Sem fundo, o contraste depende do que estiver atrás; precisa de teste com o álbum aberto.' },
+  };
   const W = 384, H = 820;
 
   /* ---------- Tela ---------- */
   const NAV = [['album', 'Álbum'], ['friends', 'Amigos'], ['trade', 'Trocas']];
   function buildScreen(v) {
     const V = VARIANTS[v];
-    screen.className = `screen skin-${V.skin || 'r1'}`;
+    screen.className = `screen skin-${V.skin || 'r1'} nb-${S.nb}`;
     screen.innerHTML = `
       <div class="statusbar"><span>16:20</span><i class="cam"></i><span class="sb-icons">
         <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M1 14h2v-3H1zM5 14h2V8H5zM9 14h2V5H9zM13 14h2V2h-2z" fill="currentColor"/></svg>
@@ -169,6 +176,11 @@
   function renderTabs() {
     const seg = $('#segs');
     seg.innerHTML = [3].map(r => `<div class="seg-wrap"><span class="seg-label">Rodada 3 · álbum e interface combinados, com cartas reais</span><div class="seg" role="tablist" aria-label="Variações da rodada ${r}">${Object.entries(VARIANTS).filter(([, V]) => V.round === r).map(([k, V]) => `<button role="tab" data-v="${k}" aria-selected="${k === S.v}"><b>${V.num}</b>${V.short}</button>`).join('')}</div></div>`).join('');
+    seg.insertAdjacentHTML('beforeend', `<div class="seg-wrap"><span class="seg-label">Barra de navegação</span><div class="seg" role="tablist" aria-label="Barra de navegação">${Object.entries(NAVBARS).map(([k, n], i) => `<button role="tab" data-nb="${k}" aria-selected="${k === S.nb}"><b>${i + 1}</b>${n.label}</button>`).join('')}</div></div>`);
+  }
+  function navCard() {
+    const b = NAVBARS[S.nb];
+    return `<div class="ncard"><div class="n-top"><span class="n-num">${Object.keys(NAVBARS).indexOf(S.nb) + 1}</span><div><h2>${b.title}</h2><p class="n-tag">Barra de navegação · Álbum, Amigos e Trocas</p></div></div><p>${b.text}</p><div class="n-pc"><div><h3>A favor</h3><p>${b.pros}</p></div><div><h3>Cuidado</h3><p>${b.cons}</p></div></div></div>`;
   }
   function renderNotes() {
     const n = VARIANTS[S.v].notes;
@@ -177,7 +189,8 @@
       ${n.refs ? `<h3>Referências</h3><p class="n-refs">${n.refs}</p>` : ''}
       <h3>Experimente</h3><ol>${n.try.map(x => `<li>${x}</li>`).join('')}</ol>
       <h3>Componentes Material 3</h3><div class="n-chips">${n.m3.map(x => `<span>${x}</span>`).join('')}</div>
-      <div class="n-pc"><div><h3>A favor</h3><p>${n.pros}</p></div><div><h3>Cuidado</h3><p>${n.cons}</p></div></div></div>`;
+      <div class="n-pc"><div><h3>A favor</h3><p>${n.pros}</p></div><div><h3>Cuidado</h3><p>${n.cons}</p></div></div></div>
+      ${navCard()}`;
   }
   function mount(v) {
     if (!VARIANTS[v]) v = 'r3a';
@@ -189,6 +202,8 @@
   const fromHash = () => { const h = location.hash.slice(1); return Object.keys(VARIANTS).find(k => VARIANTS[k].hash === h); };
   window.addEventListener('hashchange', () => { const v = fromHash(); if (v && v !== S.v) mount(v); });
   document.addEventListener('click', e => {
+    const nb = e.target.closest('#segs [data-nb]');
+    if (nb) { S.nb = nb.dataset.nb; Object.keys(NAVBARS).forEach(k => screen.classList.toggle(`nb-${k}`, k === S.nb)); renderTabs(); renderNotes(); buzz(6); return; }
     const b = e.target.closest('#segs [data-v]'); if (!b) return;
     const v = b.dataset.v; if (v === S.v) return;
     try { history.replaceState(null, '', `#${VARIANTS[v].hash}`); } catch (err) { /* ok */ }
