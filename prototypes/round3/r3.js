@@ -34,6 +34,19 @@ const R3_COVERS = {
       <i class="v1-strap"></i>
     </div>
     <div class="face v1-ci"><i class="grain"></i><i class="stitch"></i><div class="v1-plate"><small>Este álbum é da</small><b>Lia</b></div></div>`,
+  // Opção 4: o fichário inflável em vinil holográfico (PVC iridescente)
+  vinilholo: () => `
+    <div class="face v1-cf"><i class="r3d-sheen"></i><i class="grain"></i><i class="stitch"></i>
+      <div class="v1-title"><span>MEU</span><span>ÁLBUM</span></div>
+      <div class="v1-name">da Lia</div>
+      <span class="cstk" style="left:226px;top:18px;--r:16deg">${sticker('planta', 62, 'url(#r3dVivid)')}</span>
+      <span class="cstk" style="left:222px;top:196px;--r:-10deg">${sticker('eletrico', 56, 'url(#r3dVivid)')}</span>
+      <span class="cstk" style="left:30px;top:262px;--r:-14deg">${sticker('fogo', 70, 'url(#r3dVivid)')}</span>
+      <span class="cstk" style="left:126px;top:288px;--r:7deg">${sticker('sonho', 56, 'url(#r3dVivid)')}</span>
+      <div class="v1-prog"><b data-owned>${ownedCount()}</b><span>de ${total()}</span></div>
+      <i class="v1-strap"></i>
+    </div>
+    <div class="face v1-ci"><i class="grain"></i><i class="stitch"></i><div class="v1-plate"><small>Este álbum é da</small><b>Lia</b></div></div>`,
   // Opção 3: fichário em foil holográfico com emblema em baixo-relevo
   holo: () => `
     <div class="face r3c-cf">
@@ -86,10 +99,11 @@ function mountBinder(stage, api, o) {
   updCtrls();
 
   // Brilho que acompanha o dedo (usado pelo foil holográfico e pelas cartas holo)
+  const glow = stage.closest('.screen') || stage;
   stage.addEventListener('pointermove', e => {
     const r = stage.getBoundingClientRect();
-    stage.style.setProperty('--hx', `${((e.clientX - r.left) / r.width * 100).toFixed(1)}%`);
-    stage.style.setProperty('--hy', `${((e.clientY - r.top) / r.height * 100).toFixed(1)}%`);
+    glow.style.setProperty('--hx', `${((e.clientX - r.left) / r.width * 100).toFixed(1)}%`);
+    glow.style.setProperty('--hy', `${((e.clientY - r.top) / r.height * 100).toFixed(1)}%`);
   });
   let cd = null;
   coverEl.addEventListener('pointerdown', e => { if (ctl.st.busy || ctl.st.open || e.button > 0) return; cd = { x: e.clientX, id: e.pointerId, moved: false, lastA: 0, lastT: performance.now(), v: 0, eff: book.getBoundingClientRect().width / 364 }; });
@@ -147,3 +161,11 @@ VARIANTS.r3c = { round: 3, num: '3', short: 'Holo', hash: 'holo', skin: 'r3c', m
   m3: ['Top app bar', 'Navigation bar com indicador holo', 'Modal bottom sheet com anúncio', 'Snackbar'],
   pros: 'Destaca o que as crianças mais valorizam nas cartas: o brilho. Os adesivos holo são um produto natural para vender depois.',
   cons: 'O emblema de Poké Ball e o visual de marca precisam de licença. ' + R3_CONS } };
+VARIANTS.r3d = { round: 3, num: '4', short: 'Vinil holo', hash: 'vinil-holo', skin: 'r3d', mount: (s, a) => mountBinder(s, a, { cls: 'r3d', cover: 'vinilholo' }), notes: {
+  title: 'Vinil holográfico', tag: 'Capa inflável em PVC iridescente · interface de vinil com brilho holo',
+  concept: 'O fichário inflável da variação 1 feito em vinil holográfico, o mesmo PVC iridescente de estojos e mochilas. Continua cheio de ar, com brilho no topo e sombra embaixo, mas a cor muda entre rosa, lilás, azul e menta quando o dedo passa. Os adesivos da capa também são holo. A interface usa o vinil fofinho da opção 2 com o arco-íris só onde há ação: indicador da navegação, botão principal e contador.',
+  refs: 'A capa inflável da variação 1, estojos e mochilas de PVC holográfico, e o foil das cartas Rara Dupla e Ilustração Rara da coleção 151.',
+  try: ['Passe o dedo sobre a capa e veja o vinil mudar de cor.', 'Troque a barra de navegação: na pílula e no centro, o holo aparece no item ativo.', 'Guarde a <b>Venusaur ex</b> e escolha a condição.'],
+  m3: ['Top app bar', 'Navigation bar', 'Botão com gradiente', 'Modal bottom sheet com anúncio', 'Snackbar'],
+  pros: 'Junta o que você mais gostou (a capa fofinha) com o brilho que as crianças associam às cartas raras.',
+  cons: 'O efeito iridescente precisa de bom contraste no texto; mantive o título com contorno preto. ' + R3_CONS } };

@@ -20,7 +20,7 @@ App Android para crianças colecionarem cartas num álbum que parece de verdade 
 - [`docs/DESIGN.md`](docs/DESIGN.md) — design system da rodada 1 (Material 3 Expressive + referência Slush adaptada para crianças)
 - [`docs/REFERENCIAS.md`](docs/REFERENCIAS.md) — rodada 2: direção de arte a partir de Pokémon e apps de coleção, com fontes
 - [`prototypes/home/index.html`](prototypes/home/index.html) — rodadas 1 e 2: 6 variações interativas da tela inicial
-- [`prototypes/round3/index.html`](prototypes/round3/index.html) — rodada 3: fichário chapado, de vinil e holográfico, com cartas reais da coleção 151. Para ver as fotos das cartas, rode `scripts/fetch-card-images.sh` (as imagens não ficam no repositório)
+- [`prototypes/round3/index.html`](prototypes/round3/index.html) — rodada 3: fichário chapado, de vinil, holográfico e de vinil holográfico, com 5 barras de navegação e cartas reais da coleção 151. Para ver as fotos das cartas, rode `scripts/fetch-card-images.sh` (as imagens não ficam no repositório)
 
 ## Stack sugerida
 
