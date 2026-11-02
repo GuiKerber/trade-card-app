@@ -26,6 +26,14 @@ Protótipo: [`prototypes/round3/index.html`](../prototypes/round3/index.html), n
 ## Painéis (bottom sheets)
 Todo painel segue o dedo quando arrastado pela alça ou pelo título. Ele fecha se passar de 28% da altura ou se o gesto for rápido; senão, volta com mola.
 
+## Busca em todas as coleções
+- O app traz o catálogo inteiro do Pokémon TCG: **176 coleções e 20.635 cartas**, de Base (1999) à Megaevolução (2026). São só metadados (nome, número, coleção, raridade, tipo), num arquivo de 506 KB que funciona sem internet.
+- Ao digitar, aparece um **menu de sugestões** embaixo do campo, com miniatura, nome (o trecho digitado fica marcado), coleção, número e raridade.
+- O campo entende **nome** ("char"), **número** ("6", "006", "TG05"), **número com total** ("006/165", que vai direto na carta certa) e **nome da coleção** ("151", "evolu"). Coleções aparecem no topo do menu.
+- O fim do menu traz "Ver todas as N cartas", e Enter faz a mesma coisa.
+- A busca aparece em **Trocas → Procurar** (ver quem tem, pôr na lista de desejos) e em **Guardar uma carta** (tocando num bolso livre).
+- No app final, o catálogo deve vir de um serviço próprio, atualizado a cada coleção nova e com nomes em português.
+
 ## Carta (formato de marketplace)
 Os campos são coleção e número (151 · 006/165), raridade, variante (Normal, Holo, Reverse Poké Ball/Master Ball), condição (NM "Novinha", LP "Pouco usada", MP "Usada"), idioma (PT, EN, JP), ilustrador e quantidade.
 

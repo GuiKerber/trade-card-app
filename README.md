@@ -25,6 +25,11 @@ App Android para crianças colecionarem cartas num álbum que parece de verdade 
 - [`prototypes/home/index.html`](prototypes/home/index.html) — rodadas 1 e 2: 6 variações interativas da tela inicial
 - [`prototypes/round3/index.html`](prototypes/round3/index.html) — rodada 3: fichário chapado, de vinil, holográfico e de vinil holográfico, com 5 barras de navegação e cartas reais da coleção 151. Para ver as fotos das cartas, rode `scripts/fetch-card-images.sh` (as imagens não ficam no repositório)
 
+## Dados
+
+- `scripts/build-catalog.py` gera `prototypes/app/catalog.js` com todas as coleções e cartas (só metadados) a partir de PokemonTCG/pokemon-tcg-data.
+- `scripts/fetch-card-images.sh` baixa as miniaturas da coleção 151 para ver o protótipo localmente (as imagens não ficam no repositório).
+
 ## Stack sugerida
 
 - Kotlin + Jetpack Compose (Material 3 Expressive)

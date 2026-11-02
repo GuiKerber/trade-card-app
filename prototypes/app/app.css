@@ -157,3 +157,25 @@
 .sh-handle { position: relative; touch-action: none; cursor: grab; }
 .sh-handle::before { content: ""; position: absolute; left: -60px; right: -60px; top: -12px; height: 36px; }
 .sheet .sh-title, .sheet .ls-set, .sheet .fs-head { touch-action: none; }
+
+/* Busca com sugestões (todas as coleções) */
+.search-wrap { position: relative; z-index: 6; }
+.sugg { position: absolute; left: 0; right: 0; top: calc(100% + 8px); max-height: 360px; overflow-y: auto; overscroll-behavior: contain; padding: 6px; border-radius: 22px; border: 2px solid #000; background: #fff; box-shadow: 0 4px 0 #2a1a7a, 0 18px 30px -12px rgba(40, 20, 80, .45); display: grid; gap: 2px; }
+.sg-row { display: flex; align-items: center; gap: 10px; width: 100%; padding: 6px 8px; border: 0; border-radius: 14px; background: none; text-align: left; cursor: pointer; color: #000; }
+.sg-row:hover, .sg-row:focus-visible { background: #f3eeff; }
+.sg-set { background: linear-gradient(90deg, rgba(255, 255, 255, .7), rgba(255, 255, 255, .3)), var(--holo); }
+.sg-set svg { flex: none; margin: 0 6px; }
+.sg-thumb { flex: none; width: 36px; }
+.sg-thumb .rcard { box-shadow: 0 2px 4px rgba(40, 20, 80, .3); }
+.sg-txt { min-width: 0; display: grid; gap: 2px; }
+.sg-txt b { font: 800 15px/1.2 var(--ui); }
+.sg-txt b mark { background: linear-gradient(transparent 55%, #fff0a8 55%); color: inherit; }
+.sg-txt em { font: 600 12px/1.3 var(--ui); font-style: normal; color: var(--on-surface-v); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sg-all { margin-top: 4px; height: 44px; border-radius: 14px; border: 2px dashed #8a7fb0; background: none; font: 800 14px/1 var(--ui); color: #2a1a7a; cursor: pointer; }
+.sg-empty { margin: 8px; font: 600 14px/1.4 var(--ui); color: var(--on-surface-v); }
+.pg-hint { margin: -4px 4px 0; font: 600 13px/1.35 var(--ui); color: var(--on-surface-v); }
+.rhead { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin: 4px 2px 0; }
+.rhead span { display: grid; gap: 2px; min-width: 0; }
+.rhead b { font: 800 16px/1.2 var(--ui); }
+.rhead em { font: 600 13px/1.2 var(--ui); font-style: normal; color: var(--on-surface-v); }
+.sugg[hidden] { display: none; }

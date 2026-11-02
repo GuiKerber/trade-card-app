@@ -135,6 +135,20 @@ Depois:
 | Sem resultado | Nenhuma carta com "xyz". Tente o nome ou o número, como 006. |
 | Lista de desejos | Charizard ex está na sua lista de desejos. Seus amigos vão ver. · Tirei da sua lista de desejos. |
 
+### Busca (Procurar e Guardar uma carta)
+
+| Elemento | Texto |
+|---|---|
+| Campo | Nome ou número da carta |
+| Ajuda | Todas as 176 coleções · 20.635 cartas. Ex.: Pikachu, 025, 006/165 |
+| Sugestão de coleção | Prismatic Evolutions · Coleção · Escarlate e Violeta · 2025 · 180 cartas |
+| Sugestão de carta | Charizard ex · 151 · 006/165 · Rara Dupla |
+| Ver mais | Ver todas as 108 cartas |
+| Sem resultado | Nada com "xyz". Tente o nome, o número (006) ou o número com o total (006/165). |
+| Resultado | Resultado · Limpar |
+| Lista padrão | Ofertas dos seus amigos · Sua lista de desejos |
+| Carta repetida guardada | Umbreon já estava no álbum. Agora você tem 2! |
+
 ### Pedido de troca
 
 | Elemento | Texto |

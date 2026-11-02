@@ -12,28 +12,32 @@ resetAlbum();
 function albumPlace(n) { if (ALBUM.includes(n)) return; let i = ALBUM.indexOf(0); if (i < 0) { ALBUM.push(...Array(9).fill(0)); i = ALBUM.indexOf(0); } ALBUM[i] = n; }
 function albumRemove(n) { const i = ALBUM.indexOf(n); if (i >= 0) ALBUM[i] = 0; }
 
-/* Folha: guardar uma carta num bolso livre */
+/* Folha: guardar uma carta num bolso livre, buscando em todas as coleções */
 function addCardSheet(api, onDone) {
-  let q = '', pick = null, lang = 'PT';
-  const list = () => {
-    const nq = norm(q.trim()), cs = DATA.filter(c => !ALBUM.includes(c.n) && (!nq || norm(c.name).includes(nq) || numStr(c).includes(nq)));
-    return cs.length ? cs.map(c => `<div class="rrow">${thumb(c, 'sm')}<div class="rinfo"><b>${c.name}</b><span>${numStr(c)} · ${RARITY[c.r].l}</span></div><button class="btn-s" data-act="pick:${c.n}">Guardar</button></div>`).join('')
-      : '<p class="pg-empty">Nenhuma carta com esse nome. As que já estão no álbum não aparecem aqui.</p>';
-  };
+  let pick = null, lang = 'PT';
+  const rowAdd = c => `<div class="rrow">${thumb(c, 'sm')}<div class="rinfo"><b>${c.name}</b><span>${setOf(c).name} · ${numStr(c)}${c.have ? ` · você tem ${c.have}` : ''}</span></div><button class="btn-s" data-act="pick:${c.id}">Guardar</button></div>`;
+  const wish = [...WISH].map(cardById).filter(c => c && !c.have);
   const listHTML = () => `<div class="sh-handle"></div><h2 class="sh-title" id="shTitle">Guardar uma carta</h2>
-    <p class="sh-text">Escolha a carta que você ganhou. Ela vai para o bolso que você tocou.</p>
-    <label class="search" for="aq">${ico('search', 22)}<input id="aq" type="search" placeholder="Nome ou número da carta" autocomplete="off"></label>
-    <div class="rlist" id="alist">${list()}</div>`;
-  const condHTML = c => `<div class="sh-handle"></div><p class="ls-set">${c.name} · ${numStr(c)}</p><h2 class="sh-title" id="shTitle">Como ela está?</h2>
+    <p class="sh-text">Procure em todas as coleções. A carta vai para o bolso que você tocou.</p>
+    ${searchBox('aq', 'Nome ou número da carta')}<p class="pg-hint">Ex.: Pikachu, 025, 006/165</p>
+    <div class="rlist" id="alist">${wish.length ? `<h3 class="ps-h">Da sua lista de desejos</h3>${wish.map(rowAdd).join('')}` : ''}</div>`;
+  const condHTML = c => `<div class="sh-handle"></div><p class="ls-set">${c.name} · ${setOf(c).name} · ${numStr(c)}</p><h2 class="sh-title" id="shTitle">Como ela está?</h2>
     <div class="pick-lang" role="radiogroup" aria-label="Idioma da carta">${['PT', 'EN', 'JP'].map(l => `<button role="radio" aria-checked="${l === lang}" data-act="lang:${l}">${l}</button>`).join('')}</div>
     <div class="pick-cond">${[['NM', 'Novinha', 'Sem marcas'], ['LP', 'Pouco usada', 'Pontinhas brancas'], ['MP', 'Usada', 'Riscos ou dobras']].map(([k, t, d]) => `<button class="pick" data-act="cond:${k}"><b>${t}</b><span>${d}</span><em>${k}</em></button>`).join('')}</div>`;
-  api.openSheet(listHTML(), (act, sh) => {
-    const [k, v] = act.split(':');
-    if (k === 'pick') { pick = +v; sh.set(condHTML(byN(pick))); return; }
+  let sheet = null;
+  const choose = id => {
+    const c = ensureCard(id); if (!c) return;
+    if (ALBUM.includes(c.n)) { api.closeSheet(); onDone(c.n, null, null, true); return; }
+    pick = c.n; sheet.set(condHTML(c));
+  };
+  sheet = api.openSheet(listHTML(), (act, sh) => {
+    const i = act.indexOf(':'), k = act.slice(0, i), v = act.slice(i + 1);
+    if (k === 'pick') { choose(v); return; }
     if (k === 'lang') { lang = v; $$('.pick-lang button').forEach(b => b.setAttribute('aria-checked', String(b.dataset.act === act))); buzz(4); return; }
     if (k === 'cond') { api.closeSheet(); onDone(pick, v, lang); }
   });
-  const inp = $('#aq'); if (inp) inp.oninput = e => { q = e.target.value; $('#alist').innerHTML = list(); };
+  const inp = $('#aq');
+  if (inp) attachSuggest(inp, { onPick: choose, onAll: (q, r) => { $('#alist').innerHTML = `<h3 class="ps-h">${r.total.toLocaleString('pt-BR')} cartas com “${q.trim()}”</h3>${r.all.slice(0, 40).map(e => rowAdd(cardById(entryId(e)))).join('')}`; } });
 }
 
 function mountAlbum(stage, api) {
@@ -164,7 +168,14 @@ function mountAlbum(stage, api) {
     if (fl.justDragged() || dropped || !ctl.st.open) return;
     const pk = e.target.closest('[data-slot]'); if (!pk) return;
     if (pk.dataset.n) api.openDetail(+pk.dataset.n, $('.anchor', pk));
-    else { const slot = +pk.dataset.slot; addCardSheet(api, (n, cond, lang) => insert(slot, n, cond, lang)); }
+    else {
+      const slot = +pk.dataset.slot;
+      addCardSheet(api, (n, cond, lang, dup) => {
+        if (!dup) { insert(slot, n, cond, lang); return; }
+        const c = byN(n); c.have += 1; refreshSlot(ALBUM.indexOf(n)); buzz(12);
+        api.toast(`${c.name} já estava no álbum. Agora você tem ${c.have}!`);
+      });
+    }
   });
 
   return {

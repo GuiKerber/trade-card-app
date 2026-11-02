@@ -38,7 +38,7 @@ function resetSocial() {
     { id: 1, friend: 'bia', give: 25, get: 94, where: 'escola', when: 'Amanhã · manhã', status: 'new' },
     { id: 2, friend: 'theo', give: 4, get: 26, where: 'parque', when: 'Sábado · tarde', status: 'ok' },
   ];
-  WISH = new Set([199]);
+  WISH = new Set(['sv3pt5-199']);
 }
 resetSocial();
 const friendById = id => FRIENDS.find(f => f.id === id);

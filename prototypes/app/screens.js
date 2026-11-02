@@ -28,21 +28,24 @@ function proposeSheet(api, fid, n) {
 }
 
 /* ---------- Trocas ---------- */
-const TRADES_UI = { tab: 'ofertas', q: '', miss: false };
+const TRADES_UI = { tab: 'ofertas', pick: null, set: null, all: null };
 function mountTrades(stage, api) {
   stage.className = 'stage page';
   const row = c => {
-    const who = offers().filter(o => o.c.n === c.n);
-    const act = who.length ? `<button class="btn-s" data-offer="${who[0].f.id}:${c.n}">Trocar</button>`
-      : c.have ? '' : `<button class="btn-s ghost" data-wish="${c.n}" aria-pressed="${WISH.has(c.n)}">${WISH.has(c.n) ? 'Na lista' : 'Quero'}</button>`;
-    return `<div class="rrow">${thumb(c, 'sm')}<div class="rinfo"><b>${c.name}</b><span>${numStr(c)} · ${c.have ? `você tem ${c.have}` : 'falta pra você'}</span>${who.length ? `<span class="rwho">${who.map(o => `${avatar(o.f, 20)}${o.f.name}`).join('')}</span>` : '<span class="rnone">Ninguém pôs pra troca ainda</span>'}</div>${act}</div>`;
+    const who = offers().filter(o => o.c.id === c.id);
+    const act = who.length ? `<button class="btn-s" data-offer="${who[0].f.id}:${who[0].c.n}">Trocar</button>`
+      : c.have ? '' : `<button class="btn-s ghost" data-wish="${c.id}" aria-pressed="${WISH.has(c.id)}">${WISH.has(c.id) ? 'Na lista' : 'Quero'}</button>`;
+    return `<div class="rrow">${thumb(c, 'sm')}<div class="rinfo"><b>${c.name}</b><span>${setOf(c).name} · ${numStr(c)} · ${c.have ? `você tem ${c.have}` : 'falta pra você'}</span>${who.length ? `<span class="rwho">${who.map(o => `${avatar(o.f, 20)}${o.f.name}`).join('')}</span>` : '<span class="rnone">Ninguém pôs pra troca ainda</span>'}</div>${act}</div>`;
   };
+  const head = (t, sub) => `<div class="rhead"><span><b>${t}</b>${sub ? `<em>${sub}</em>` : ''}</span><button class="btn-s ghost" data-clear>Limpar</button></div>`;
   const results = () => {
-    const q = norm(TRADES_UI.q.trim());
-    let list = DATA.filter(c => !q || norm(c.name).includes(q) || String(c.n).includes(q.replace(/^0+/, '')) || numStr(c).includes(q));
-    if (TRADES_UI.miss) list = list.filter(c => !c.have);
-    if (!q && !TRADES_UI.miss) list = list.filter(c => !c.have || offers().some(o => o.c.n === c.n));
-    return list.length ? list.map(row).join('') : `<p class="pg-empty">Nenhuma carta com “${TRADES_UI.q}”. Tente o nome ou o número, como 006.</p>`;
+    const P = TRADES_UI;
+    if (P.pick) return `${head('Resultado')}${row(cardById(P.pick))}`;
+    if (P.set != null) { const st = CAT.sets[P.set]; return `${head(st.name, `${st.series} · ${st.count} cartas`)}${setCards(P.set, 60).map(e => row(cardById(entryId(e)))).join('')}${st.count > 60 ? `<p class="pg-empty">Mostrando 60 de ${st.count}. Digite o nome ou o número para achar outra.</p>` : ''}`; }
+    if (P.all) { const r = searchCatalog(P.all, 60); return `${head(`“${P.all}”`, `${r.total.toLocaleString('pt-BR')} cartas`)}${r.cards.map(e => row(cardById(entryId(e)))).join('') || '<p class="pg-empty">Nada encontrado.</p>'}`; }
+    const off = [...new Map(offers().map(o => [o.c.id, o.c])).values()];
+    const wish = [...WISH].map(cardById).filter(c => c && !off.some(o => o.id === c.id));
+    return `<h3 class="pg-h">Ofertas dos seus amigos</h3>${off.map(row).join('')}${wish.length ? `<h3 class="pg-h">Sua lista de desejos</h3>${wish.map(row).join('')}` : ''}`;
   };
   const reqCard = r => {
     const f = friendById(r.friend), give = byN(r.give), get = byN(r.get);
@@ -62,8 +65,7 @@ function mountTrades(stage, api) {
         ${rest.length ? `<h3 class="pg-h">Você já tem</h3><div class="ogrid">${rest.map(offerTile).join('')}</div>` : ''}`;
     }
     if (TRADES_UI.tab === 'procurar') {
-      return `<label class="search" for="q">${ico('search', 22)}<input id="q" type="search" placeholder="Nome ou número da carta" value="${TRADES_UI.q}" autocomplete="off" enterkeyhint="search"></label>
-        <div class="chips"><button class="fchip" data-miss aria-pressed="${TRADES_UI.miss}">Só as que faltam</button></div>
+      return `${searchBox('q', 'Nome ou número da carta')}<p class="pg-hint">Todas as ${CAT.sets.length} coleções · ${CAT.cards.length.toLocaleString('pt-BR')} cartas. Ex.: Pikachu, 025, 006/165</p>
         <div class="rlist" id="rlist">${results()}</div>`;
     }
     const sec = (t, st) => { const l = REQS.filter(r => r.status === st); return l.length ? `<h3 class="pg-h">${t}</h3>${l.map(reqCard).join('')}` : ''; };
@@ -73,13 +75,18 @@ function mountTrades(stage, api) {
   const render = () => {
     const pend = REQS.filter(r => r.status === 'new').length;
     stage.innerHTML = `<div class="pg"><div class="segin" role="tablist" aria-label="Trocas">${[['ofertas', 'Ofertas'], ['procurar', 'Procurar'], ['pedidos', 'Pedidos']].map(([k, l]) => `<button role="tab" data-tt="${k}" aria-selected="${k === TRADES_UI.tab}">${l}${k === 'pedidos' && pend ? `<i class="dotn">${pend}</i>` : ''}</button>`).join('')}</div><div class="pg-body">${body()}</div></div>`;
+    const q = $('#q', stage);
+    if (q) {
+      const show = patch => { Object.assign(TRADES_UI, { pick: null, set: null, all: null }, patch); $('#rlist', stage).innerHTML = results(); };
+      attachSuggest(q, { onPick: id => show({ pick: id }), onSet: st => show({ set: st.i }), onAll: v => show({ all: v.trim() }) });
+    }
   };
   render();
   stage.addEventListener('click', e => {
     const t = e.target.closest('[data-tt]'); if (t) { TRADES_UI.tab = t.dataset.tt; render(); buzz(4); return; }
     const o = e.target.closest('[data-offer]'); if (o) { const [fid, n] = o.dataset.offer.split(':'); proposeSheet(api, fid, +n); return; }
-    const w = e.target.closest('[data-wish]'); if (w) { const n = +w.dataset.wish; WISH.has(n) ? WISH.delete(n) : WISH.add(n); $('#rlist', stage).innerHTML = results(); api.toast(WISH.has(n) ? `${byN(n).name} está na sua lista de desejos. Seus amigos vão ver.` : 'Tirei da sua lista de desejos.'); return; }
-    if (e.target.closest('[data-miss]')) { TRADES_UI.miss = !TRADES_UI.miss; render(); return; }
+    const w = e.target.closest('[data-wish]'); if (w) { const id = w.dataset.wish; WISH.has(id) ? WISH.delete(id) : WISH.add(id); $('#rlist', stage).innerHTML = results(); api.toast(WISH.has(id) ? `${cardById(id).name} está na sua lista de desejos. Seus amigos vão ver.` : 'Tirei da sua lista de desejos.'); return; }
+    if (e.target.closest('[data-clear]')) { Object.assign(TRADES_UI, { pick: null, set: null, all: null }); const q = $('#q', stage); if (q) q.value = ''; $('#rlist', stage).innerHTML = results(); return; }
     const r = e.target.closest('[data-rq]'); if (!r) return;
     const [act, id] = r.dataset.rq.split(':'), rq = REQS.find(x => String(x.id) === id); if (!rq) return;
     const f = friendById(rq.friend);
@@ -98,7 +105,6 @@ function mountTrades(stage, api) {
     }
     render();
   });
-  stage.addEventListener('input', e => { if (e.target.id === 'q') { TRADES_UI.q = e.target.value; $('#rlist', stage).innerHTML = results(); } });
   return { close() {}, isOpen: () => false, key() {} };
 }
 

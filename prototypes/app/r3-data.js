@@ -1,6 +1,9 @@
 /* Coleção da Lia sobre cartas reais + dados no formato de anúncio de marketplace
    (nome · coleção e número · raridade · variante · condição · idioma · quantidade · ilustrador) */
 const SET = { name: '151', series: 'Escarlate e Violeta', total: 165, code: 'MEW' };
+const SETS_BY_ID = {};
+const setOf = c => SETS_BY_ID[c.set] || SET;
+const REAL_IDS = new Set(REAL.map(x => x.id));
 const RARITY = {
   c: { l: 'Comum', s: '●' }, u: { l: 'Incomum', s: '◆' }, r: { l: 'Rara', s: '★' },
   dr: { l: 'Rara Dupla', s: '★★' }, ir: { l: 'Ilustração Rara', s: '★', gold: true }, sir: { l: 'Ilustração Rara Especial', s: '★★', gold: true },
@@ -21,13 +24,14 @@ const FOIL = { dr: 'Holo', ir: 'Holo', sir: 'Holo', r: 'Holo' };
 function resetData() {
   DATA = REAL.map(x => {
     const [have, cond, lang, variant] = OWN0[x.n] || [0];
-    return { ...x, have, cond: cond || null, lang: lang || null, variant: variant || null, isNew: false, holo: !!variant && variant !== 'Normal' };
+    return { ...x, number: String(x.n), set: 'sv3pt5', have, cond: cond || null, lang: lang || null, variant: variant || null, isNew: false, holo: !!variant && variant !== 'Normal' };
   });
 }
 resetData();
 const total = () => DATA.length;
-const numStr = c => `${pad(c.n)}/${SET.total}`;
-const imgSrc = c => (window.CARD_BASE ? `${window.CARD_BASE}${c.n}.png` : `cards/${c.id}.webp`);
+const fmtNum = v => (/^\d+$/.test(v) ? v.padStart(3, '0') : v);
+const numStr = c => `${fmtNum(String(c.number ?? c.n))}/${setOf(c).total}`;
+const imgSrc = c => (window.CARD_BASE || !REAL_IDS.has(c.id) ? `https://images.pokemontcg.io/${c.set || 'sv3pt5'}/${c.number || c.n}.png` : `cards/${c.id}.webp`);
 
 /* Miniatura da carta real (com moldura de reserva enquanto a imagem não existe) */
 function cardHTML(c) {
@@ -49,15 +53,15 @@ function aria(c) {
 /* Bloco de anúncio, no formato que TCGplayer, Cardmarket e Liga Pokémon usam */
 function listingHTML(c, owned) {
   const r = RARITY[c.r];
-  const row = (k, v) => `<div class="ls-row"><dt>${k}</dt><dd>${v}</dd></div>`;
+  const row = (k, v) => `<div class="ls-row"><dt>${k}</dt><dd>${v || '—'}</dd></div>`;
   return `<div class="listing">
-    <p class="ls-set"><span class="ls-code">${SET.code}</span>${SET.name} · ${SET.series}</p>
+    <p class="ls-set"><span class="ls-code">${setOf(c).code}</span>${setOf(c).name} · ${setOf(c).series}</p>
     <h2 class="sh-title" id="shTitle">${c.name}</h2>
     <p class="ls-num"><b>${numStr(c)}</b><span class="ls-rar${r.gold ? ' gold' : ''}">${r.s}</span>${r.l}</p>
     <dl class="ls-grid">
       ${owned ? row('Variante', c.variant) : row('Tipo', TYPE_PT[c.type])}
       ${owned ? row('Condição', `<span class="cond">${c.cond}</span> ${COND[c.cond]}`) : row('PS', c.hp)}
-      ${owned ? row('Idioma', `${c.lang} · ${LANG[c.lang]}`) : row('Pokédex', `#${pad(c.dex)}`)}
+      ${owned ? row('Idioma', `${c.lang} · ${LANG[c.lang]}`) : row('Pokédex', c.dex ? `#${pad(c.dex)}` : '')}
       ${row('Ilustração', c.artist)}
     </dl>
   </div>`;
