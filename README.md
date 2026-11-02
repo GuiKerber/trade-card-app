@@ -18,6 +18,8 @@ App Android para crianças colecionarem cartas num álbum que parece de verdade 
 ## Design
 
 - [`docs/DIRECAO.md`](docs/DIRECAO.md) — **direção escolhida**: interface de vinil holográfico + álbum em foil holográfico
+- [`prototypes/app/index.html`](prototypes/app/index.html) — **app v1**: álbum, trocas, amigos e loja na direção escolhida
+- [`docs/TEXTOS.md`](docs/TEXTOS.md) — textos do app, v1 (voz e tom, glossário, telas e mensagens para adultos)
 - [`docs/DESIGN.md`](docs/DESIGN.md) — design system da rodada 1 (Material 3 Expressive + referência Slush adaptada para crianças)
 - [`docs/REFERENCIAS.md`](docs/REFERENCIAS.md) — rodada 2: direção de arte a partir de Pokémon e apps de coleção, com fontes
 - [`prototypes/home/index.html`](prototypes/home/index.html) — rodadas 1 e 2: 6 variações interativas da tela inicial
