@@ -1,0 +1,18 @@
+plugins { id 'com.android.application' }
+
+android {
+    namespace 'app.tradecard.album'
+    compileSdk 34
+    defaultConfig {
+        applicationId 'app.tradecard.album'
+        minSdk 26
+        targetSdk 34
+        versionCode 1
+        versionName '0.1-teste'
+    }
+    buildTypes { release { minifyEnabled false } }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+}
