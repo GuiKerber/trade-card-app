@@ -31,6 +31,7 @@
     $('.navbar', screen).addEventListener('click', e => { const b = e.target.closest('[data-tab]'); if (b) go(b.dataset.tab); });
     $('#scrim', screen).addEventListener('click', () => (S.D ? closeDetail('back') : closeSheet()));
     $('#sheet', screen).addEventListener('click', onSheetClick);
+    sheetDrag($('#sheet', screen));
   }
   function renderNav() {
     const cur = S.tab === 'store' ? S.prev : S.tab;
@@ -75,6 +76,33 @@
   }
 
   /* ---------- Sheet genérico ---------- */
+  // Arrastar o painel para baixo fecha (com mola e velocidade); soltar antes faz ele voltar
+  let sheetDragged = false;
+  function sheetDrag(sh) {
+    let d = null;
+    const sc = () => $('#scrim', screen);
+    sh.addEventListener('pointerdown', e => {
+      if (!S.G) return;
+      const head = e.target.closest('.sh-handle, .sh-title, .ls-set, .fs-head');
+      if (!head && (sh.scrollTop > 0 || e.target.closest('input, .ps-mine, .chips'))) return;
+      d = { y0: e.clientY, id: e.pointerId, dy: 0, on: false, lastY: e.clientY, lastT: performance.now(), v: 0, k: screen.getBoundingClientRect().height / screen.offsetHeight };
+    });
+    sh.addEventListener('pointermove', e => {
+      if (!d) return; const dy = (e.clientY - d.y0) / d.k;
+      if (!d.on) { if (Math.abs(dy) < 8) return; if (dy < 0) { d = null; return; } d.on = true; sheetAnim && sheetAnim.stop(); sc().style.transition = 'none'; try { sh.setPointerCapture(d.id); } catch (err) { /* ok */ } }
+      const now = performance.now(); d.v = (e.clientY - d.lastY) / d.k / Math.max(1, now - d.lastT) * 1000; d.lastY = e.clientY; d.lastT = now;
+      d.dy = Math.max(0, dy); sh.style.transform = `translateY(${d.dy}px)`; sc().style.opacity = String(clamp(1 - d.dy / sh.offsetHeight, 0, 1));
+    });
+    const up = () => {
+      if (!d) return; const x = d; d = null; if (!x.on) return;
+      sheetDragged = true; setTimeout(() => { sheetDragged = false; }, 60);
+      const h = sh.offsetHeight, f = x.dy / h; sc().style.transition = ''; sc().style.opacity = '';
+      const anim = (to, cfg) => { sheetAnim = spring({ from: f, to, velocity: x.v / h, ...cfg, onUpdate: v => { sh.style.transform = `translateY(${v * 100}%)`; } }); };
+      if (x.dy > h * .28 || x.v > 650) { S.G = null; sc().classList.remove('on'); anim(1.05, M.defaultSpatial); buzz(8); } else anim(0, M.fastSpatial);
+    };
+    sh.addEventListener('pointerup', up); sh.addEventListener('pointercancel', up);
+  }
+
   let sheetAnim = null;
   function showSheet(on) {
     const sh = $('#sheet', screen); $('#scrim', screen).classList.toggle('on', on);
@@ -91,82 +119,79 @@
   }
   function closeSheet() { if (!S.G) return; S.G = null; showSheet(false); }
   function onSheetClick(e) {
-    if (S.D) return onDetailClick(e);
-    if (!S.G) return;
+    if (!S.G || sheetDragged) return;
     if (S.G.raw && S.G.raw(e)) return;
     const b = e.target.closest('[data-act]'); if (!b || b.disabled) return;
     S.G.handler(b.dataset.act, S.G, b);
   }
 
-  /* ---------- Carta ampliada + anúncio + pôr pra troca ---------- */
-  const TW = 212, TO = { x: (W - TW) / 2, y: 104 };
+  /* ---------- Carta em foco: sem painel por cima; os detalhes ficam no verso ---------- */
   const placeZoom = (z, x, y, w, rot) => { z.style.left = `${x}px`; z.style.top = `${y}px`; z.style.width = `${w}px`; z.style.transform = `rotate(${rot}deg)`; };
-  function sheetHTML(c, owned) {
-    if (owned) {
-      const dup = c.have - 1;
-      const text = c.trade ? `Está na sua lista de troca. Seus amigos podem ver.${dup > 0 ? ` Você tem ${c.have}.` : ' É a sua única: se trocar, o bolso fica vazio.'}`
-        : dup > 0 ? `Você tem <b>${c.have}</b>. Dá pra pôr <b>${dup}</b> pra troca e continuar com uma.` : c.isNew ? '<b>Nova!</b> Acabou de entrar no álbum.' : 'Você tem <b>1</b> guardada aqui.';
-      const tr = c.trade ? `<button class="btn btn-tonal" data-act="trade-off">${ico('trade', 22)} Tirar da troca</button>` : `<button class="btn btn-tonal" data-act="trade-on">${ico('trade', 22)} Pôr pra troca</button>`;
-      return `<div class="sh-handle"></div>${listingHTML(c, true)}<p class="sh-text">${text}</p><div class="sh-actions two">${tr}<button class="btn btn-filled" data-act="back">Guardar</button></div>`;
-    }
-    const who = offers().filter(o => o.c.n === c.n);
-    const hint = who.length ? `<p class="sh-text">${who.map(o => o.f.name).join(' e ')} ${who.length > 1 ? 'puseram' : 'pôs'} essa pra troca.</p>` : '<p class="sh-text"><b>Ainda falta essa!</b> Quando ganhar, guarde aqui.</p>';
-    const tradeBtn = who.length ? `<button class="btn btn-tonal" data-act="ask:${who[0].f.id}">${ico('trade', 22)} Pedir troca</button>` : '';
-    return `<div class="sh-handle"></div>${listingHTML(c, false)}${hint}<div class="sh-actions">${tradeBtn}<button class="btn btn-filled" data-act="pick">${ico('plus', 24)} Ganhei! Guardar no álbum</button><button class="btn btn-text" data-act="back">Agora não</button></div>`;
+  function focusLayout() {
+    const Hs = screen.offsetHeight, top = DEVICE ? 20 : 48, avail = Hs - top - 168 - (DEVICE ? 12 : 24);
+    const w = Math.min(268, avail * 63 / 88), h = w * 88 / 63;
+    return { x: (W - w) / 2, y: top + (avail - h) / 2, w, h };
   }
-  function pickerHTML(c) {
-    const conds = [['NM', 'Novinha', 'Sem marcas'], ['LP', 'Pouco usada', 'Pontinhas brancas'], ['MP', 'Usada', 'Riscos ou dobras']];
-    return `<div class="sh-handle"></div><p class="ls-set">${c.name} · ${numStr(c)}</p><h2 class="sh-title" id="shTitle">Como ela está?</h2>
-      <div class="pick-lang" role="radiogroup" aria-label="Idioma da carta">${['PT', 'EN', 'JP'].map(l => `<button role="radio" aria-checked="${l === S.lang}" data-act="lang:${l}">${l}</button>`).join('')}</div>
-      <div class="pick-cond">${conds.map(([k, t, d]) => `<button class="pick" data-act="ins:${k}"><b>${t}</b><span>${d}</span><em>${k}</em></button>`).join('')}</div>`;
+  function qtyText(c) {
+    const dup = c.have - 1;
+    if (c.trade) return `Está na sua lista de troca. ${dup > 0 ? `Você tem ${c.have}.` : 'É a sua única: se trocar, o bolso fica vazio.'}`;
+    return dup > 0 ? `Você tem <b>${c.have}</b>. Dá pra pôr <b>${dup}</b> pra troca e continuar com uma.` : c.isNew ? '<b>Nova!</b> Acabou de entrar no álbum.' : 'Você tem <b>1</b> guardada aqui.';
   }
-  function onDetailClick(e) {
-    const b = e.target.closest('[data-act]'); if (!b || !S.D) return; const a = b.dataset.act, D = S.D, sh = $('#sheet', screen);
-    if (a === 'pick') { sh.innerHTML = pickerHTML(D.c); buzz(6); return; }
-    if (a.startsWith('lang:')) { S.lang = a.slice(5); $$('.pick-lang button', screen).forEach(x => x.setAttribute('aria-checked', String(x.dataset.act === a))); buzz(4); return; }
-    if (a === 'trade-on' || a === 'trade-off') {
-      D.c.trade = a === 'trade-on' ? 1 : 0; D.dirty = true; sh.innerHTML = sheetHTML(D.c, true); buzz(10);
-      toast(D.c.trade ? `${D.c.name} está na sua lista de troca.` : `${D.c.name} saiu da lista de troca.`); return;
-    }
-    if (a.startsWith('ask:')) { const fid = a.slice(4), n = D.n; closeDetail('back', () => proposeSheet(api, fid, n)); return; }
-    closeDetail(a);
-  }
+  const cardBack = c => `<div class="cback">${listingHTML(c, true).replace('id="shTitle"', '')}<p class="cb-qty">${qtyText(c)}</p></div>`;
+  const focusUI = c => `<p class="fu-name"><b>${c.name}</b> <span>· ${numStr(c)}</span></p><p class="fu-hint">Toque na carta para ver os detalhes · arraste para baixo para fechar</p>
+    <div class="fu-acts">${c.trade ? `<button class="btn btn-tonal" data-act="trade-off">${ico('trade', 22)} Tirar da troca</button>` : `<button class="btn btn-tonal" data-act="trade-on">${ico('trade', 22)} Pôr pra troca</button>`}<button class="btn btn-filled" data-act="back">Guardar</button></div>`;
   function openDetail(n, anchor) {
     if (S.D || S.G || !anchor) return;
-    const c = byN(n), owned = c.have > 0, from = rectIn(anchor);
+    const c = byN(n), from = rectIn(anchor), L = focusLayout();
     const rot = parseFloat(getComputedStyle(anchor).getPropertyValue('--rot')) || 0;
     const z = document.createElement('div'); z.className = 'zoom';
-    z.innerHTML = `<div class="zoom-tilt"><div class="zoom-flip${owned ? '' : ' is-back'}"><div class="zf front">${cardHTML(c)}</div><div class="zf back">${backHTML(!owned)}</div></div></div>`;
-    screen.appendChild(z); if (owned) anchor.classList.add('lifted');
-    const D = S.D = { n, c, owned, anchor, rot, z, cur: { x: from.x, y: from.y, w: from.w, r: rot } };
+    z.innerHTML = `<div class="zoom-tilt"><div class="zoom-flip"><div class="zf front">${cardHTML(c)}</div><div class="zf back">${cardBack(c)}</div></div></div>`;
+    const ui = document.createElement('div'); ui.className = 'focus-ui'; ui.style.top = `${L.y + L.h + 16}px`; ui.innerHTML = focusUI(c);
+    screen.append(z, ui); anchor.classList.add('lifted');
+    const sc = $('#scrim', screen); sc.classList.add('on', 'focus');
+    const D = S.D = { n, c, anchor, rot, z, ui, cur: { x: from.x, y: from.y, w: from.w, r: rot } };
     placeZoom(z, from.x, from.y, from.w, rot);
-    D.anim = spring({ from: 0, to: 1, ...M.fastSpatial, onUpdate: t => { D.cur = { x: lerp(from.x, TO.x, t), y: lerp(from.y, TO.y, t), w: lerp(from.w, TW, t), r: lerp(rot, 0, t) }; placeZoom(z, D.cur.x, D.cur.y, D.cur.w, D.cur.r); } });
-    $('#sheet', screen).innerHTML = sheetHTML(c, owned); showSheet(true); buzz(8);
+    D.anim = spring({ from: 0, to: 1, ...M.fastSpatial, onUpdate: t => { D.cur = { x: lerp(from.x, L.x, t), y: lerp(from.y, L.y, t), w: lerp(from.w, L.w, t), r: lerp(rot, 0, t) }; placeZoom(z, D.cur.x, D.cur.y, D.cur.w, D.cur.r); } });
+    requestAnimationFrame(() => ui.classList.add('on')); buzz(8);
     const tilt = $('.zoom-tilt', z), flip = $('.zoom-flip', z);
-    z.addEventListener('pointermove', e => { const r = z.getBoundingClientRect(), px = clamp((e.clientX - r.left) / r.width, 0, 1), py = clamp((e.clientY - r.top) / r.height, 0, 1);
-      tilt.style.transform = `rotateY(${(px - .5) * 26}deg) rotateX(${(.5 - py) * 22}deg)`; ['--hx', '--gx'].forEach(k => z.style.setProperty(k, `${px * 100}%`)); ['--hy', '--gy'].forEach(k => z.style.setProperty(k, `${py * 100}%`)); });
-    z.addEventListener('pointerleave', () => { tilt.style.transform = ''; });
-    z.addEventListener('click', () => { if (D.owned && !D.closing) { flip.classList.toggle('is-back'); buzz(6); } });
+    ui.addEventListener('click', e => {
+      const b = e.target.closest('[data-act]'); if (!b || D.closing) return; const a = b.dataset.act;
+      if (a === 'back') { closeDetail('back'); return; }
+      c.trade = a === 'trade-on' ? 1 : 0; D.dirty = true; ui.innerHTML = focusUI(c); $('.zf.back', z).innerHTML = cardBack(c); buzz(10);
+      toast(c.trade ? `${c.name} está na sua lista de troca.` : `${c.name} saiu da lista de troca.`);
+    });
+    // Arrastar a carta para baixo fecha; se soltar antes, ela volta com mola
+    let dg = null, dragged = false;
+    z.addEventListener('pointerdown', e => { if (D.closing) return; dg = { x0: e.clientX, y0: e.clientY, id: e.pointerId, dy: 0, on: false, lastY: e.clientY, lastT: performance.now(), v: 0, k: screen.getBoundingClientRect().height / screen.offsetHeight }; });
+    z.addEventListener('pointermove', e => {
+      if (!dg) {
+        const r = z.getBoundingClientRect(), px = clamp((e.clientX - r.left) / r.width, 0, 1), py = clamp((e.clientY - r.top) / r.height, 0, 1);
+        tilt.style.transform = `rotateY(${(px - .5) * 26}deg) rotateX(${(.5 - py) * 22}deg)`; ['--hx', '--gx'].forEach(k => z.style.setProperty(k, `${px * 100}%`)); ['--hy', '--gy'].forEach(k => z.style.setProperty(k, `${py * 100}%`));
+        return;
+      }
+      const dy = (e.clientY - dg.y0) / dg.k, dx = (e.clientX - dg.x0) / dg.k;
+      if (!dg.on) { if (Math.hypot(dx, dy) < 8) return; if (Math.abs(dx) > Math.abs(dy) || dy < 0) { dg = null; return; } dg.on = true; dragged = true; D.anim && D.anim.stop(); tilt.style.transform = ''; sc.style.transition = 'none'; try { z.setPointerCapture(dg.id); } catch (err) { /* ok */ } }
+      const now = performance.now(); dg.v = (e.clientY - dg.lastY) / dg.k / Math.max(1, now - dg.lastT) * 1000; dg.lastY = e.clientY; dg.lastT = now;
+      dg.dy = Math.max(0, dy); z.style.translate = `0 ${dg.dy}px`; ui.style.opacity = String(clamp(1 - dg.dy / 120, 0, 1)); sc.style.opacity = String(clamp(1 - dg.dy / 360, .2, 1));
+    });
+    const up = () => {
+      if (!dg) return; const g = dg; dg = null; setTimeout(() => { dragged = false; }, 60); if (!g.on) return;
+      sc.style.transition = '';
+      if (g.dy > 100 || g.v > 650) { D.cur.y += g.dy; z.style.translate = ''; placeZoom(z, D.cur.x, D.cur.y, D.cur.w, D.cur.r); sc.style.opacity = ''; closeDetail('back'); }
+      else { spring({ from: g.dy, to: 0, velocity: g.v, ...M.fastSpatial, onUpdate: v => { z.style.translate = `0 ${v}px`; } }); ui.style.opacity = ''; sc.style.opacity = ''; }
+    };
+    z.addEventListener('pointerup', up); z.addEventListener('pointercancel', up);
+    z.addEventListener('pointerleave', () => { if (!dg) tilt.style.transform = ''; });
+    z.addEventListener('click', () => { if (!dragged && !D.closing) { flip.classList.toggle('is-back'); buzz(6); } });
   }
   function flyTo(D, to, cfg, done) { const f = { ...D.cur }; D.anim && D.anim.stop(); D.anim = spring({ from: 0, to: 1, ...cfg, onUpdate: t => placeZoom(D.z, lerp(f.x, to.x, t), lerp(f.y, to.y, t), lerp(f.w, to.w, t), lerp(f.r, to.r, t)), onDone: done }); }
   function closeDetail(mode, after) {
-    const D = S.D; if (!D || D.closing) return; D.closing = true; showSheet(false); $('.zoom-tilt', D.z).style.transform = '';
-    if (mode.startsWith('ins:')) {
-      $('.zoom-flip', D.z).classList.remove('is-back'); buzz(12);
-      setTimeout(() => {
-        const r = rectIn(D.anchor), st = getComputedStyle($('#stage', screen)), ix = parseFloat(st.getPropertyValue('--ix')) || 0, iy = parseFloat(st.getPropertyValue('--iy')) || 0;
-        flyTo(D, { x: r.x + ix * r.w, y: r.y + iy * r.h, w: r.w, r: D.rot }, M.defaultSpatial, () => {
-          D.z.remove(); S.D = null;
-          Object.assign(D.c, { have: 1, isNew: true, cond: mode.slice(4), lang: S.lang, variant: FOIL[D.c.r] || 'Normal' }); D.c.holo = D.c.variant !== 'Normal';
-          const pk = S.ctrl.replacePocket(D.n), a = $('.anchor', pk);
-          if (a) { a.style.setProperty('--ins', 1); spring({ from: 1, to: 0, ...M.defaultSpatial, onUpdate: v => a.style.setProperty('--ins', v) }); }
-          celebrate(D.c, pk);
-        });
-      }, RM ? 0 : 560);
-    } else {
-      const r = rectIn(D.anchor);
-      flyTo(D, { x: r.x, y: r.y, w: r.w, r: D.rot }, M.defaultSpatial, () => { D.z.remove(); D.anchor.classList.remove('lifted'); S.D = null; if (D.dirty) S.ctrl.replacePocket(D.n); after && after(); });
-    }
+    const D = S.D; if (!D || D.closing) return; D.closing = true;
+    const sc = $('#scrim', screen); sc.classList.remove('on'); setTimeout(() => sc.classList.remove('focus'), 300);
+    D.ui.classList.remove('on'); setTimeout(() => D.ui.remove(), 300);
+    $('.zoom-tilt', D.z).style.transform = ''; $('.zoom-flip', D.z).classList.remove('is-back');
+    const r = rectIn(D.anchor);
+    flyTo(D, { x: r.x, y: r.y, w: r.w, r: D.rot }, M.defaultSpatial, () => { D.z.remove(); D.anchor.classList.remove('lifted'); S.D = null; if (D.dirty) S.ctrl.replacePocket(D.n); after && after(); });
   }
   function celebrate(c, pk) {
     buzz(25); const r = rectIn(pk); confetti(r.x + r.w / 2, r.y + r.h / 3, 20);

@@ -17,6 +17,15 @@ Protótipo: [`prototypes/round3/index.html`](../prototypes/round3/index.html), n
 - **Fundo:** lilás-claro (#F1ECFF → #E3EDFF), com manchas suaves de rosa, azul e menta.
 - **Texto:** preto sobre o holo. Branco com contorno preto só nos títulos sobre a capa.
 
+## Carta em foco
+- Ao tocar numa carta, ela sai do bolso e fica grande no centro, com o fundo escurecido e **sem painel por cima**.
+- Embaixo ficam o nome, a dica e os botões **Pôr pra troca** e **Guardar**.
+- **Tocar vira a carta:** o verso mostra o anúncio (coleção, número, raridade, variante, condição, idioma, ilustrador e quantidade).
+- **Arrastar para baixo fecha.** A carta segue o dedo e volta com mola se for solta antes de 100dp.
+
+## Painéis (bottom sheets)
+Todo painel segue o dedo quando arrastado pela alça ou pelo título. Ele fecha se passar de 28% da altura ou se o gesto for rápido; senão, volta com mola.
+
 ## Carta (formato de marketplace)
 Os campos são coleção e número (151 · 006/165), raridade, variante (Normal, Holo, Reverse Poké Ball/Master Ball), condição (NM "Novinha", LP "Pouco usada", MP "Usada"), idioma (PT, EN, JP), ilustrador e quantidade.
 

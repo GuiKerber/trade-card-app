@@ -59,7 +59,16 @@ Primeira versão de todos os textos da interface, para crianças de 6 a 12 anos 
 | Contracapa | Este álbum é da Lia |
 | Folha completa | Completei! |
 
-### Detalhe da carta (no formato de anúncio)
+### Carta em foco
+A carta sai do bolso e fica grande no meio da tela, sem nenhum painel por cima. Embaixo dela aparecem o nome, a dica e dois botões. Tocar na carta vira e mostra os detalhes no verso, e arrastar a carta para baixo fecha.
+
+| Elemento | Texto |
+|---|---|
+| Nome | Charizard ex · 006/165 |
+| Dica | Toque na carta para ver os detalhes · arraste para baixo para fechar |
+| Botões | Pôr pra troca · Tirar da troca · Guardar |
+
+### Verso da carta (no formato de anúncio)
 
 | Campo | Exemplo |
 |---|---|
