@@ -7,7 +7,7 @@
   const NAV = [['album', 'album', 'Álbum'], ['trade', 'trade', 'Trocas'], ['friends', 'friends', 'Amigos']];
   const NAVBARS = { centro: 'Centro (escolhida)', padrao: 'Padrão', pilula: 'Pílula', abas: 'Abas', adesivo: 'Adesivos' };
   const TAB_NOTES = {
-    album: { t: 'Álbum', p: 'O álbum é infinito: não tem total de cartas, e sempre há uma folha nova no fim. Toque numa carta e use <b>Pôr pra troca</b>. As cartas marcadas ganham o selo de setas no bolso e aparecem para os seus amigos.', try: ['Abra o álbum e toque no Pikachu (você tem 3).', 'Toque em <b>Pôr pra troca</b> ou <b>Tirar da troca</b>.', 'Vire até a última folha: ela está vazia, esperando cartas novas.', 'Toque em <b>Loja</b>, no canto de cima à direita, e troque a capa.'] },
+    album: { t: 'Álbum', p: 'A criança decide a ordem: segura uma carta e arrasta para outro bolso, inclusive em outra folha (é só levar a carta até a borda). Bolso livre serve para guardar carta nova. O álbum é infinito, sempre com uma folha nova no fim.', try: ['Abra o álbum, segure a Charmander e solte no bolso da Bulbasaur: elas trocam de lugar.', 'Segure uma carta e leve até a borda direita para carregar para a próxima folha.', 'Toque num bolso livre e guarde a Venusaur ex.', 'Toque no Pikachu e use <b>Pôr pra troca</b>.'] },
     trade: { t: 'Trocas', p: 'Três abas: <b>Ofertas</b> mostra o que os amigos puseram pra troca (as que faltam no seu álbum vêm primeiro), <b>Procurar</b> busca uma carta pelo nome ou número, e <b>Pedidos</b> guarda os pedidos novos, as trocas combinadas e as enviadas.', try: ['Em Ofertas, toque na Venusaur ex de Theo, escolha uma carta sua, o lugar e o dia.', 'Em Pedidos, aceite o pedido de Bia e depois toque em <b>Já trocamos</b>: a Gengar entra no seu álbum.', 'Em Procurar, digite “char” ou “199”.'] },
     friends: { t: 'Amigos', p: 'O seu código (e o QR Code) e a lista de amigos. Amigos só entram pessoalmente e com aprovação de um adulto. Não tem chat.', try: ['Toque em <b>Adicionar amigo</b> e digite NUVEM-357.', 'Abra um amigo para ver as cartas que ele pôs pra troca.'] },
     store: { t: 'Loja', p: '10 capas e 10 adesivos para colar na capa do álbum. Itens pagos pedem um adulto antes (porta de segurança para os pais). Nada é cobrado no protótipo.', try: ['Toque numa capa grátis (Aurora) para usar.', 'Em Adesivos, toque em Chama e arraste o adesivo na capa.', 'Toque numa capa paga para ver a pergunta para o adulto.'] },
@@ -58,7 +58,7 @@
   function mountTab() {
     const stage = $('#stage', screen);
     const fresh = stage.cloneNode(false); stage.replaceWith(fresh); fresh.removeAttribute('style');
-    if (S.tab === 'album') { S.ctrl = mountBinder(fresh, api, { cls: 'r3c', cover: 'holo' }); applySkin(fresh); }
+    if (S.tab === 'album') { S.ctrl = mountAlbum(fresh, api); applySkin(fresh); }
     else S.ctrl = { trade: mountTrades, friends: mountFriends, store: mountStore }[S.tab](fresh, api);
     renderAppbar(); renderNav(); if (!DEVICE) renderNotes();
   }
@@ -207,7 +207,7 @@
     if (e.target.closest && e.target.closest('input,textarea')) return;
     if (e.key === 'ArrowRight') S.ctrl.key(1); if (e.key === 'ArrowLeft') S.ctrl.key(-1);
   });
-  if (!DEVICE) $('#reset').addEventListener('click', () => { resetData(); resetTrade(); resetSocial(); resetStore(); Object.assign(TRADES_UI, { tab: 'ofertas', q: '', miss: false }); STORE_UI.sel = -1; S.tab = 'album'; buildScreen(); mountTab(); });
+  if (!DEVICE) $('#reset').addEventListener('click', () => { resetData(); resetTrade(); resetSocial(); resetStore(); resetAlbum(); Object.assign(TRADES_UI, { tab: 'ofertas', q: '', miss: false }); STORE_UI.sel = -1; S.tab = 'album'; buildScreen(); mountTab(); });
   let baseH = 0;
   function fit() {
     if (DEVICE) {

@@ -7,7 +7,7 @@ Protótipo: [`prototypes/round3/index.html`](../prototypes/round3/index.html), n
 - **Emblema:** Poké Ball gravada em baixo-relevo, numa forma só (aro, faixa e botão com a mesma profundidade). A metade de cima tem um leve tom rosado.
 - **Lombada:** couro sintético grafite. A capa começa na dobra da lombada e gira nela.
 - **Adesivos:** holo, com contorno preto e recorte branco. São candidatos a venda futura em pacotes.
-- **Interior:** folhas grafite (#14121B) com 9 bolsos de plástico brilhante. As cartas reais ficam em miniatura. A carta que falta aparece em cinza, e as repetidas ganham o selo ×N.
+- **Interior:** folhas grafite (#14121B) com 9 bolsos de plástico brilhante. As cartas reais ficam em miniatura, e as repetidas ganham o selo ×N.
 
 ## Interface
 - **Topo:** título à esquerda ("Oi, Lia!", ou voltar + título) e o botão **Loja** à direita. Não há contador de cartas.
@@ -22,8 +22,11 @@ Os campos são coleção e número (151 · 006/165), raridade, variante (Normal,
 
 Ao guardar uma carta nova, a criança escolhe a condição e o idioma em um toque. O preço fica de fora por enquanto. Se entrar, vai para a área dos pais.
 
-## Álbum infinito
-O álbum não tem total de cartas. Sempre existe uma **folha nova** vazia no fim, e as folhas crescem conforme a criança guarda cartas.
+## Álbum infinito, na ordem da criança
+- O álbum não tem total de cartas. Sempre existe uma **folha nova** vazia no fim, e as folhas crescem conforme a criança guarda cartas.
+- **A ordem é da criança**, não da coleção nem da data. Ela segura uma carta (cerca de 0,4 s) e arrasta para outro bolso. Se o bolso tiver carta, as duas trocam de lugar. Levando a carta até a borda da folha, a página vira e a carta vai junto.
+- Bolsos guardam só cartas que a criança tem. **Bolso livre** mostra um + e, ao ser tocado, abre "Guardar uma carta" (busca, condição e idioma).
+- Carta recebida numa troca vai para o primeiro bolso livre. Ao dar a última cópia, o bolso fica livre.
 
 ## Ainda em aberto
 1. **Licença:** o emblema de Poké Ball e as imagens das cartas pertencem à The Pokémon Company. Para publicar o app, é preciso licença ou uma fonte autorizada de imagens.

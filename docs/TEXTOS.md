@@ -52,10 +52,12 @@ Primeira versão de todos os textos da interface, para crianças de 6 a 12 anos 
 |---|---|
 | Dica na capa fechada | Toque ou arraste a capa |
 | Capa | MEU ÁLBUM |
-| Última folha | Folha nova · Guarde aqui as próximas cartas |
+| Última folha | Folha nova · Toque num bolso para guardar uma carta |
+| Dica (primeira vez que abre) | Dica: segure uma carta e arraste para mudar de lugar. |
+| Bolso livre (acessibilidade) | Bolso livre. Toque para guardar uma carta. |
+| Carta no bolso (acessibilidade) | Pikachu, 025/165, Comum, você tem 3. Segure para mudar de lugar. |
 | Contracapa | Este álbum é da Lia |
 | Folha completa | Completei! |
-| Bolso vazio (acessibilidade) | Venusaur ex, 003/165, falta essa |
 
 ### Detalhe da carta (no formato de anúncio)
 
@@ -88,7 +90,17 @@ Primeira versão de todos os textos da interface, para crianças de 6 a 12 anos 
 | Dois ou mais | Theo e Bia puseram essa pra troca. |
 | Botões | Pedir troca · Ganhei! Guardar no álbum · Agora não |
 
-### Guardar carta nova
+### Guardar carta nova (tocando num bolso livre)
+
+| Elemento | Texto |
+|---|---|
+| Título | Guardar uma carta |
+| Instrução | Escolha a carta que você ganhou. Ela vai para o bolso que você tocou. |
+| Busca | Nome ou número da carta |
+| Botão | Guardar |
+| Sem resultado | Nenhuma carta com esse nome. As que já estão no álbum não aparecem aqui. |
+
+Depois:
 
 | Elemento | Texto |
 |---|---|

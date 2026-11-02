@@ -91,6 +91,7 @@ function mountTrades(stage, api) {
       give.have = Math.max(0, give.have - 1); give.trade = Math.min(give.trade, give.have ? give.trade - 1 : 0);
       get.have += 1; get.isNew = true; if (!get.cond) { get.cond = 'NM'; get.lang = 'PT'; get.variant = FOIL[get.r] || 'Normal'; get.holo = get.variant !== 'Normal'; }
       f.offers = f.offers.filter(x => x !== get.n);
+      if (!give.have) albumRemove(give.n); albumPlace(get.n);
       REQS.splice(REQS.indexOf(rq), 1);
       const rect = api.rectIn(stage); api.confetti(rect.x + rect.w / 2, rect.y + 200, 24);
       api.toast(`${get.name} foi pro seu álbum!`); api.counter();
