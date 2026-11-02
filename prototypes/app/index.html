@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Álbum, trocas e loja</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Fredoka:wght@500;600&family=Nunito:wght@600;700;800;900&display=swap">
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="album.css">
+<link rel="stylesheet" href="r3.css">
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="headline" id="headline">
+      <h1>Álbum, trocas e loja</h1>
+      <p class="lede">Primeira versão do app na direção escolhida. Marque cartas pra troca no álbum, veja ofertas e pedidos em Trocas, adicione amigos pelo código e enfeite a capa na Loja. Use a barra de navegação do celular.</p>
+    </div>
+    <div class="segs" id="segs"></div>
+  </header>
+
+  <main class="stagegrid">
+    <div class="device-slot" id="slot">
+      <div class="device" id="device">
+        <div class="screen" id="screen"></div>
+      </div>
+    </div>
+    <aside class="notes" id="notes" aria-live="polite"></aside>
+  </main>
+
+  <footer class="foot">
+    <p>Dados das cartas: coleção 151 (Escarlate e Violeta), do conjunto aberto PokemonTCG/pokemon-tcg-data. Pokémon e as imagens das cartas pertencem à Nintendo, Creatures e GAME FREAK; o app final precisa de licença ou de uma fonte autorizada de imagens.</p>
+    <button class="btn-reset" id="reset" type="button">Restaurar o exemplo</button>
+  </footer>
+</div>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <linearGradient id="r3dHolo" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ffb3d9"/>
+      <stop offset=".3" stop-color="#d9b8ff"/>
+      <stop offset=".55" stop-color="#a9dcff"/>
+      <stop offset=".8" stop-color="#b4f5dc"/>
+      <stop offset="1" stop-color="#fff0a8"/>
+    </linearGradient>
+    <linearGradient id="r3dVivid" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ff5fa2"/>
+      <stop offset=".3" stop-color="#9b6bff"/>
+      <stop offset=".55" stop-color="#2fa8ff"/>
+      <stop offset=".8" stop-color="#2fd39a"/>
+      <stop offset="1" stop-color="#ffcf3f"/>
+    </linearGradient>
+    <linearGradient id="metal" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset=".45" stop-color="#bcc4d0"/>
+      <stop offset=".6" stop-color="#7d8796"/>
+      <stop offset="1" stop-color="#e9eef4"/>
+    </linearGradient>
+  </defs>
+</svg>
+
+<script src="core.js"></script>
+<script src="r3-cards.js"></script>
+<script src="r3-data.js"></script>
+<script src="r3.js"></script>
+<script src="state.js"></script>
+<script src="screens.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
