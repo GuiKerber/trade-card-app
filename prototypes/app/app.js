@@ -2,9 +2,10 @@
 (() => {
   const screen = $('#screen'), device = $('#device'), slot = $('#slot');
   const W = 384, H = 820;
-  const S = { tab: 'album', prev: 'album', ctrl: null, open: false, title: '', D: null, G: null, snackT: 0, lang: 'PT', nb: 'padrao' };
+  const DEVICE = document.body.classList.contains('device-mode');
+  const S = { tab: 'album', prev: 'album', ctrl: null, open: false, title: '', D: null, G: null, snackT: 0, lang: 'PT', nb: 'centro' };
   const NAV = [['album', 'album', 'Álbum'], ['trade', 'trade', 'Trocas'], ['friends', 'friends', 'Amigos']];
-  const NAVBARS = { padrao: 'Padrão', pilula: 'Pílula', centro: 'Centro', abas: 'Abas', adesivo: 'Adesivos' };
+  const NAVBARS = { centro: 'Centro (escolhida)', padrao: 'Padrão', pilula: 'Pílula', abas: 'Abas', adesivo: 'Adesivos' };
   const TAB_NOTES = {
     album: { t: 'Álbum', p: 'Toque numa carta e use <b>Pôr pra troca</b>. As cartas marcadas ganham o selo de setas no bolso e aparecem para os seus amigos.', try: ['Abra o álbum e toque no Pikachu (você tem 3).', 'Toque em <b>Pôr pra troca</b> ou <b>Tirar da troca</b>.', 'Toque em <b>Loja</b>, no canto de cima, e troque a capa.'] },
     trade: { t: 'Trocas', p: 'Três abas: <b>Ofertas</b> mostra o que os amigos puseram pra troca (as que faltam no seu álbum vêm primeiro), <b>Procurar</b> busca uma carta pelo nome ou número, e <b>Pedidos</b> guarda os pedidos novos, as trocas combinadas e as enviadas.', try: ['Em Ofertas, toque na Venusaur ex de Theo, escolha uma carta sua, o lugar e o dia.', 'Em Pedidos, aceite o pedido de Bia e depois toque em <b>Já trocamos</b>: a Gengar entra no seu álbum.', 'Em Procurar, digite “char” ou “199”.'] },
@@ -61,7 +62,7 @@
     const fresh = stage.cloneNode(false); stage.replaceWith(fresh); fresh.removeAttribute('style');
     if (S.tab === 'album') { S.ctrl = mountBinder(fresh, api, { cls: 'r3c', cover: 'holo' }); applySkin(fresh); }
     else S.ctrl = { trade: mountTrades, friends: mountFriends, store: mountStore }[S.tab](fresh, api);
-    renderAppbar(); renderNav(); renderNotes();
+    renderAppbar(); renderNav(); if (!DEVICE) renderNotes();
   }
   const api = {
     setOpen(open, title = '') { S.open = open; S.title = title; renderAppbar(); },
@@ -193,7 +194,7 @@
 
   /* ---------- Página de apresentação ---------- */
   function renderTabs() {
-    $('#segs').innerHTML = `<div class="seg-wrap"><span class="seg-label">Barra de navegação (ainda em aberto)</span><div class="seg" role="tablist" aria-label="Barra de navegação">${Object.entries(NAVBARS).map(([k, l], i) => `<button role="tab" data-nb="${k}" aria-selected="${k === S.nb}"><b>${i + 1}</b>${l}</button>`).join('')}</div></div>`;
+    $('#segs').innerHTML = `<div class="seg-wrap"><span class="seg-label">Barra de navegação</span><div class="seg" role="tablist" aria-label="Barra de navegação">${Object.entries(NAVBARS).map(([k, l], i) => `<button role="tab" data-nb="${k}" aria-selected="${k === S.nb}"><b>${i + 1}</b>${l}</button>`).join('')}</div></div>`;
   }
   function renderNotes() {
     const n = TAB_NOTES[S.tab];
@@ -209,13 +210,23 @@
     if (e.target.closest && e.target.closest('input,textarea')) return;
     if (e.key === 'ArrowRight') S.ctrl.key(1); if (e.key === 'ArrowLeft') S.ctrl.key(-1);
   });
-  $('#reset').addEventListener('click', () => { resetData(); resetTrade(); resetSocial(); resetStore(); Object.assign(TRADES_UI, { tab: 'ofertas', q: '', miss: false }); STORE_UI.sel = -1; S.tab = 'album'; buildScreen(); mountTab(); });
+  if (!DEVICE) $('#reset').addEventListener('click', () => { resetData(); resetTrade(); resetSocial(); resetStore(); Object.assign(TRADES_UI, { tab: 'ofertas', q: '', miss: false }); STORE_UI.sel = -1; S.tab = 'album'; buildScreen(); mountTab(); });
   function fit() {
+    if (DEVICE) { const s = Math.min(innerWidth / W, innerHeight / 772); device.style.transform = `scale(${s})`; slot.style.width = `${W * s}px`; slot.style.height = `${772 * s}px`; return; }
     const narrow = innerWidth < 560; document.body.classList.toggle('narrow', narrow);
     const dw = narrow ? W : 408, dh = narrow ? H : 844, availW = narrow ? innerWidth - 16 : Math.min(innerWidth - 48, 520), availH = narrow ? 1e4 : innerHeight - 32;
     const s = Math.max(.55, Math.min(1, availW / dw, availH / dh));
     device.style.transform = `scale(${s})`; slot.style.width = `${dw * s}px`; slot.style.height = `${dh * s}px`;
   }
   window.addEventListener('resize', fit);
-  fit(); buildScreen(); renderTabs(); mountTab();
+  // Botão voltar do Android (chamado pelo app nativo)
+  window.appBack = () => {
+    if (S.D) { closeDetail('back'); return true; }
+    if (S.G) { closeSheet(); return true; }
+    if (S.tab === 'store') { go(S.prev); return true; }
+    if (S.tab === 'album' && S.open) { S.ctrl.close(); return true; }
+    if (S.tab !== 'album') { go('album'); return true; }
+    return false;
+  };
+  fit(); buildScreen(); if (!DEVICE) renderTabs(); mountTab();
 })();
