@@ -7,7 +7,7 @@
   const NAV = [['album', 'album', 'Álbum'], ['trade', 'trade', 'Trocas'], ['friends', 'friends', 'Amigos']];
   const NAVBARS = { centro: 'Centro (escolhida)', padrao: 'Padrão', pilula: 'Pílula', abas: 'Abas', adesivo: 'Adesivos' };
   const TAB_NOTES = {
-    album: { t: 'Álbum', p: 'Toque numa carta e use <b>Pôr pra troca</b>. As cartas marcadas ganham o selo de setas no bolso e aparecem para os seus amigos.', try: ['Abra o álbum e toque no Pikachu (você tem 3).', 'Toque em <b>Pôr pra troca</b> ou <b>Tirar da troca</b>.', 'Toque em <b>Loja</b>, no canto de cima, e troque a capa.'] },
+    album: { t: 'Álbum', p: 'O álbum é infinito: não tem total de cartas, e sempre há uma folha nova no fim. Toque numa carta e use <b>Pôr pra troca</b>. As cartas marcadas ganham o selo de setas no bolso e aparecem para os seus amigos.', try: ['Abra o álbum e toque no Pikachu (você tem 3).', 'Toque em <b>Pôr pra troca</b> ou <b>Tirar da troca</b>.', 'Vire até a última folha: ela está vazia, esperando cartas novas.', 'Toque em <b>Loja</b>, no canto de cima à direita, e troque a capa.'] },
     trade: { t: 'Trocas', p: 'Três abas: <b>Ofertas</b> mostra o que os amigos puseram pra troca (as que faltam no seu álbum vêm primeiro), <b>Procurar</b> busca uma carta pelo nome ou número, e <b>Pedidos</b> guarda os pedidos novos, as trocas combinadas e as enviadas.', try: ['Em Ofertas, toque na Venusaur ex de Theo, escolha uma carta sua, o lugar e o dia.', 'Em Pedidos, aceite o pedido de Bia e depois toque em <b>Já trocamos</b>: a Gengar entra no seu álbum.', 'Em Procurar, digite “char” ou “199”.'] },
     friends: { t: 'Amigos', p: 'O seu código (e o QR Code) e a lista de amigos. Amigos só entram pessoalmente e com aprovação de um adulto. Não tem chat.', try: ['Toque em <b>Adicionar amigo</b> e digite NUVEM-357.', 'Abra um amigo para ver as cartas que ele pôs pra troca.'] },
     store: { t: 'Loja', p: '10 capas e 10 adesivos para colar na capa do álbum. Itens pagos pedem um adulto antes (porta de segurança para os pais). Nada é cobrado no protótipo.', try: ['Toque numa capa grátis (Aurora) para usar.', 'Em Adesivos, toque em Chama e arraste o adesivo na capa.', 'Toque numa capa paga para ver a pergunta para o adulto.'] },
@@ -40,14 +40,12 @@
   }
   function renderAppbar() {
     const ab = $('#appbar', screen); if (!ab) return;
-    screen.style.setProperty('--own', ownedCount() / total());
-    const chip = `<div class="count" id="count" aria-label="${ownedCount()} de ${total()} cartas">${ico('cards', 22)}<b>${ownedCount()}</b>/${total()}</div>`;
     const back = label => `<button class="icon-btn" id="abBack" aria-label="${label}">${ico('back', 24)}</button>`;
     const store = `<button class="store-btn" id="abStore" aria-label="Abrir a loja">${ico('bag', 22)}<span>Loja</span></button>`;
-    let lead = store, title = { album: 'Oi, Lia!', trade: 'Trocas', friends: 'Amigos' }[S.tab];
-    if (S.tab === 'store') { lead = back('Voltar'); title = 'Loja'; }
+    let lead = '', title = { album: 'Oi, Lia!', trade: 'Trocas', friends: 'Amigos' }[S.tab], end = store;
+    if (S.tab === 'store') { lead = back('Voltar'); title = 'Loja'; end = ''; }
     else if (S.tab === 'album' && S.open) { lead = back('Fechar o álbum'); title = S.title; }
-    ab.innerHTML = `${lead}<div class="ab-title">${title}</div>${chip}`;
+    ab.innerHTML = `${lead}<div class="ab-title">${title}</div>${end}`;
     const b = $('#abBack', ab); if (b) b.addEventListener('click', () => { if (S.D || S.G) return; S.tab === 'store' ? go(S.prev) : S.ctrl.close(); });
     const s = $('#abStore', ab); if (s) s.addEventListener('click', () => go('store'));
   }
@@ -173,8 +171,7 @@
   function celebrate(c, pk) {
     buzz(25); const r = rectIn(pk); confetti(r.x + r.w / 2, r.y + r.h / 3, 20);
     $$('[data-owned]', screen).forEach(el => { el.textContent = ownedCount(); });
-    renderAppbar(); const cnt = $('#count', screen); cnt && cnt.classList.add('bump');
-    toast(S.ctrl.afterInsert(c.n) ? `Folha completa! ${c.name} foi pro álbum.` : `${c.name} foi pro álbum! Agora são ${ownedCount()} de ${total()}.`);
+    toast(S.ctrl.afterInsert(c.n) ? `Folha completa! ${c.name} foi pro álbum.` : `${c.name} foi pro álbum!`);
   }
   function confetti(x, y, n = 18) {
     if (RM) return;

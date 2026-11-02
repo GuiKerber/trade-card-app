@@ -93,8 +93,7 @@ const stkOnCover = (s, i) => { const st = stkOf(s.id); return `<span class="r3c-
 function coverFaceHTML() {
   return `<div class="face r3c-cf"><i class="r3c-foil"></i><i class="r3c-lines"></i><i class="r3c-glitter"></i><i class="r3c-glare"></i><i class="r3c-stitch"></i>
     <div class="r3c-ball">${R3_BALL}</div><div class="r3c-word">MEU ÁLBUM</div>
-    ${COVER.stickers.map(stkOnCover).join('')}
-    <div class="r3c-prog"><b data-owned>${ownedCount()}</b> de ${total()}</div></div>`;
+    ${COVER.stickers.map(stkOnCover).join('')}</div>`;
 }
 R3_COVERS.holo = () => `${coverFaceHTML()}<div class="face r3c-ci"><div class="v1-plate"><small>Este álbum é da</small><b>Lia</b></div></div>`;
 
@@ -104,3 +103,6 @@ const badgesBase = badges;
 badges = c => `${badgesBase(c)}${c.have && c.trade ? `<span class="ttag" title="Pra troca">${TRADE_ICO}</span>` : ''}`;
 const avatar = (f, size = 36) => `<span class="fav" style="--fc:${f.color};width:${size}px;height:${size}px;font-size:${Math.round(size * .46)}px" aria-hidden="true">${f.name[0]}</span>`;
 const thumb = (c, cls = '') => `<span class="mini ${cls}">${cardHTML(c)}</span>`;
+
+// O álbum é infinito: sempre existe uma folha nova, vazia, no fim
+R3_PAGES.push([0, 0, 0, 0, 0, 0, 0, 0, 0]);

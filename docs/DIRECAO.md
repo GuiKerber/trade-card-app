@@ -10,6 +10,8 @@ Protótipo: [`prototypes/round3/index.html`](../prototypes/round3/index.html), n
 - **Interior:** folhas grafite (#14121B) com 9 bolsos de plástico brilhante. As cartas reais ficam em miniatura. A carta que falta aparece em cinza, e as repetidas ganham o selo ×N.
 
 ## Interface
+- **Topo:** título à esquerda ("Oi, Lia!", ou voltar + título) e o botão **Loja** à direita. Não há contador de cartas.
+- **Navegação:** barra **Centro**. O Álbum é um mini fichário holográfico que salta da barra, entre Trocas e Amigos.
 - **Material:** vinil fofinho, com gradiente sutil de cima para baixo, contorno preto de 2dp e degrau roxo-escuro (#2A1A7A) no lugar de sombra.
 - **Holo só onde há ação:** item ativo da navegação, botão principal, contador da coleção, avatar e borda do sheet. O gradiente é `#FFB3D9 → #D9B8FF → #A9DCFF → #B4F5DC → #FFF0A8` e se desloca com o toque.
 - **Fundo:** lilás-claro (#F1ECFF → #E3EDFF), com manchas suaves de rosa, azul e menta.
@@ -20,7 +22,9 @@ Os campos são coleção e número (151 · 006/165), raridade, variante (Normal,
 
 Ao guardar uma carta nova, a criança escolhe a condição e o idioma em um toque. O preço fica de fora por enquanto. Se entrar, vai para a área dos pais.
 
+## Álbum infinito
+O álbum não tem total de cartas. Sempre existe uma **folha nova** vazia no fim, e as folhas crescem conforme a criança guarda cartas.
+
 ## Ainda em aberto
-1. **Barra de navegação:** escolher entre Padrão, Pílula, Centro, Abas e Adesivos. As cinco já funcionam nesta direção.
-2. **Licença:** o emblema de Poké Ball e as imagens das cartas pertencem à The Pokémon Company. Para publicar o app, é preciso licença ou uma fonte autorizada de imagens.
-3. **Modo escuro e acessibilidade:** testar o contraste do texto sobre o holo e o comportamento com "remover animações".
+1. **Licença:** o emblema de Poké Ball e as imagens das cartas pertencem à The Pokémon Company. Para publicar o app, é preciso licença ou uma fonte autorizada de imagens.
+2. **Modo escuro e acessibilidade:** testar o contraste do texto sobre o holo e o comportamento com "remover animações".

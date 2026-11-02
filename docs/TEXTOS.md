@@ -39,11 +39,11 @@ Primeira versão de todos os textos da interface, para crianças de 6 a 12 anos 
 
 | Lugar | Texto |
 |---|---|
-| Barra de navegação | Álbum · Trocas · Amigos |
-| Botão do topo esquerdo | Loja |
+| Barra de navegação (Centro) | Trocas · **Álbum** (mini fichário no meio) · Amigos |
+| Botão do topo direito | Loja |
 | Título da home | Oi, Lia! |
-| Contador da coleção | 21/27 · leitura: "21 de 27 cartas" |
-| Títulos das telas | Trocas · Amigos · Loja · Folha 1 de 3 |
+| Títulos das telas | Trocas · Amigos · Loja · Folha 1 |
+| Contador | Não existe: o álbum é infinito, sem total de cartas |
 | Voltar (acessibilidade) | Fechar o álbum · Voltar |
 
 ## Álbum
@@ -51,7 +51,8 @@ Primeira versão de todos os textos da interface, para crianças de 6 a 12 anos 
 | Situação | Texto |
 |---|---|
 | Dica na capa fechada | Toque ou arraste a capa |
-| Capa | MEU ÁLBUM · "21 de 27" |
+| Capa | MEU ÁLBUM |
+| Última folha | Folha nova · Guarde aqui as próximas cartas |
 | Contracapa | Este álbum é da Lia |
 | Folha completa | Completei! |
 | Bolso vazio (acessibilidade) | Venusaur ex, 003/165, falta essa |
@@ -94,7 +95,7 @@ Primeira versão de todos os textos da interface, para crianças de 6 a 12 anos 
 | Título | Como ela está? |
 | Idioma | PT · EN · JP |
 | Opções | **Novinha** Sem marcas (NM) · **Pouco usada** Pontinhas brancas (LP) · **Usada** Riscos ou dobras (MP) |
-| Snackbar | Venusaur ex foi pro álbum! Agora são 22 de 27. |
+| Snackbar | Venusaur ex foi pro álbum! |
 | Snackbar (folha completa) | Folha completa! Venusaur ex foi pro álbum. |
 
 ## Trocas
