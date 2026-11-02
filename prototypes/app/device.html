@@ -14,7 +14,12 @@
   html, body { height: 100%; overflow: hidden; background: #f1ecff; overscroll-behavior: none; -webkit-tap-highlight-color: transparent; user-select: none; }
   .device-mode #slot { position: relative; margin: 0 auto; }
   .device-mode #device { position: absolute; left: 0; top: 0; width: 384px; height: 772px; padding: 0; background: none; box-shadow: none; border-radius: 0; transform-origin: 0 0; }
-  .device-mode .screen { height: 772px; border-radius: 0; box-shadow: none !important; grid-template-rows: 0 64px 1fr 80px 0; }
+  .device-mode .screen { width: 384px; height: 772px; border-radius: 0; box-shadow: none !important; grid-template-rows: 0 64px 1fr 80px 0; }
+  /* Teclado aberto: a barra de navegação sai e o conteúdo usa a altura toda */
+  .device-mode .screen.kb { grid-template-rows: 0 64px 1fr 0 0; }
+  .device-mode .screen.kb .navbar { visibility: hidden; overflow: hidden; }
+  /* Em telas mais altas, o álbum fica centralizado na área disponível */
+  .device-mode .stage.v1 > * { margin-top: var(--stage-dy, 0px); }
   .device-mode .statusbar, .device-mode .gesture { visibility: hidden; overflow: hidden; }
   .device-mode .snack { bottom: 92px; }
 </style>

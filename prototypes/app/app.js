@@ -208,8 +208,19 @@
     if (e.key === 'ArrowRight') S.ctrl.key(1); if (e.key === 'ArrowLeft') S.ctrl.key(-1);
   });
   if (!DEVICE) $('#reset').addEventListener('click', () => { resetData(); resetTrade(); resetSocial(); resetStore(); Object.assign(TRADES_UI, { tab: 'ofertas', q: '', miss: false }); STORE_UI.sel = -1; S.tab = 'album'; buildScreen(); mountTab(); });
+  let baseH = 0;
   function fit() {
-    if (DEVICE) { const s = Math.min(innerWidth / W, innerHeight / 772); device.style.transform = `scale(${s})`; slot.style.width = `${W * s}px`; slot.style.height = `${772 * s}px`; return; }
+    if (DEVICE) {
+      // Tela cheia: a largura define a escala e a altura acompanha o aparelho (e o teclado)
+      const s = innerWidth / W, h = Math.round(innerHeight / s);
+      baseH = Math.max(baseH, innerHeight);
+      const kb = baseH - innerHeight > 150;
+      screen.classList.toggle('kb', kb);
+      device.style.transform = `scale(${s})`; device.style.height = `${h}px`; screen.style.height = `${h}px`;
+      slot.style.width = `${innerWidth}px`; slot.style.height = `${innerHeight}px`;
+      screen.style.setProperty('--stage-dy', `${Math.max(0, Math.round((h - 64 - (kb ? 0 : 80) - 628) / 2))}px`);
+      return;
+    }
     const narrow = innerWidth < 560; document.body.classList.toggle('narrow', narrow);
     const dw = narrow ? W : 408, dh = narrow ? H : 844, availW = narrow ? innerWidth - 16 : Math.min(innerWidth - 48, 520), availH = narrow ? 1e4 : innerHeight - 32;
     const s = Math.max(.55, Math.min(1, availW / dw, availH / dh));
