@@ -12,7 +12,7 @@
 .rcard .holo { opacity: .38; }
 .zoom .rcard .holo { opacity: .5; }
 .ph.rghost { border: 0; container-type: inline-size; }
-.rghost .rcard { filter: grayscale(1) brightness(1.08) contrast(.9); opacity: .5; }
+.rghost .rcard { filter: grayscale(1) brightness(1.15) contrast(.9); opacity: .62; }
 .rghost .ph-num { bottom: 40%; font: 800 max(13px, 15cqw)/1 var(--ui); color: #fff; text-shadow: 0 1px 2px rgba(0, 0, 0, .6); }
 .vtag, .ltag { position: absolute; z-index: 3; bottom: -5px; height: 20px; min-width: 20px; padding: 0 5px; border-radius: 999px; border: 2px solid #000; font: 900 11px/16px var(--ui); text-align: center; color: #000; }
 .vtag { right: -5px; background: conic-gradient(from 30deg, #ff9ec7, #ffd36e, #8ef0c3, #8cc7ff, #c3a6ff, #ff9ec7); }

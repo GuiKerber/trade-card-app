@@ -1,7 +1,7 @@
 /* App da rodada 3: tela Android, carta ampliada, anúncio no formato de marketplace, celebração */
 (() => {
   const screen = $('#screen'), device = $('#device'), slot = $('#slot');
-  const S = { v: 'r3a', ctrl: null, open: false, title: '', D: null, snackT: 0, lang: 'PT', nb: 'padrao' };
+  const S = { v: 'r3f', ctrl: null, open: false, title: '', D: null, snackT: 0, lang: 'PT', nb: 'padrao' };
   const NAVBARS = {
     padrao: { label: 'Padrão', title: 'Barra padrão do Material 3', text: 'Barra fixa embaixo, com ícone e rótulo em cada destino e uma pílula no item ativo. É o que a criança já viu em outros apps.', pros: 'Previsível e fácil de implementar com o componente do Material.', cons: 'Neutra: não conversa com o álbum.' },
     pilula: { label: 'Pílula', title: 'Pílula flutuante', text: 'A barra se solta das bordas e flutua sobre o fundo, como a navegação flexível do Material 3 Expressive. O item ativo vira uma pílula com o rótulo ao lado do ícone.', pros: 'Leve, moderna e deixa o fundo respirar em volta do álbum.', cons: 'Com 3 rótulos fica justa em telas de 360dp; com 4 destinos não cabe.' },
@@ -193,7 +193,7 @@
       ${navCard()}`;
   }
   function mount(v) {
-    if (!VARIANTS[v]) v = 'r3a';
+    if (!VARIANTS[v]) v = 'r3f';
     S.v = v; S.open = false; S.D = null;
     buildScreen(v); renderAppbar();
     S.ctrl = VARIANTS[v].mount($('#stage', screen), api);
@@ -227,7 +227,7 @@
   window.addEventListener('resize', fit);
   $('#headline').insertAdjacentHTML('beforeend', `<span class="h-stk" style="right:-6px;top:-22px;--r:14deg">${sticker('sonho', 58, '#FFD731')}</span><span class="h-stk" style="left:-18px;bottom:-30px;--r:-12deg">${sticker('fogo', 46, '#FB4903')}</span>`);
   fit();
-  const start = data => mount(fromHash() || (data && data.v) || 'r3a');
+  const start = data => mount(fromHash() || (data && data.v) || 'r3f');
   if (window.claude?.hot) { window.claude.hot.snapshot?.(() => ({ v: S.v })); window.claude.hot.ready ? window.claude.hot.ready(start) : start(window.claude.hot.data ?? {}); }
   else start({});
 })();

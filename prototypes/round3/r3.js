@@ -137,6 +137,14 @@ function mountBinder(stage, api, o) {
 }
 
 const R3_CONS = 'As fotos das cartas dependem de liberar o domínio de imagens. Enquanto isso, cada bolso mostra a moldura com nome e número reais.';
+VARIANTS.r3f = { round: 3, num: '★', short: 'Escolhida', hash: 'final', skin: 'r3d', mount: (s, a) => mountBinder(s, a, { cls: 'r3c', cover: 'holo' }), notes: {
+  title: 'Direção escolhida', tag: 'Interface de vinil holográfico · álbum em foil holográfico',
+  concept: 'A interface da opção 4 com o álbum da opção 3. A capa é foil holográfico com linhas finas e glitter, que muda de cor quando o dedo passa, e tem o emblema de Poké Ball gravado no centro. Em volta, a interface é de vinil fofinho, com contorno preto, degrau roxo-escuro e o arco-íris só onde há ação: indicador da navegação, botão principal, contador e avatar. Dentro, folhas escuras de 9 bolsos com as cartas reais.',
+  refs: 'Fichários de Poké Ball, o foil das cartas Rara Dupla e Ilustração Rara da coleção 151, PVC holográfico de estojos e mochilas, e o brilho por inclinação do TCG Pocket.',
+  try: ['Passe o dedo sobre a capa e sobre a barra de navegação: o holo dos dois se move junto.', 'Teste as 5 barras de navegação nesta direção e escolha uma.', 'Abra a Charizard ex (006/165) e depois guarde a Venusaur ex (003/165).'],
+  m3: ['Top app bar', 'Navigation bar (a escolher)', 'Botão com gradiente holo', 'Modal bottom sheet com anúncio', 'Snackbar'],
+  pros: 'O álbum fica mais "colecionável" (foil e emblema), e a interface continua fofinha e legível para crianças.',
+  cons: 'O emblema de Poké Ball precisa de licença para ir à loja. Falta escolher a barra de navegação.' } };
 VARIANTS.r3a = { round: 3, num: '1', short: 'Chapado', hash: 'chapado', skin: 'r1', mount: (s, a) => mountBinder(s, a, { cls: 'r3a', cover: 'flat' }), notes: {
   title: 'Mesma interface, álbum chapado', tag: 'Fichário amarelo com elástico · cores sólidas e contorno preto',
   concept: 'A interface fica igual à da variação 1 e o álbum passa a falar a mesma língua: cores sólidas, contorno preto e volume dado por um degrau sólido, sem gradiente nem sombra borrada. A capa é uma versão mínima do fichário amarelo da sua referência, com blocos de cor e um selo de energia no centro, fechada por elástico como na variação 1.',
