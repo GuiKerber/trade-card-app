@@ -27,7 +27,7 @@ function resetData() {
 resetData();
 const total = () => DATA.length;
 const numStr = c => `${pad(c.n)}/${SET.total}`;
-const imgSrc = c => `cards/${c.id}.png`;
+const imgSrc = c => `cards/${c.id}.webp`;
 
 /* Miniatura da carta real (com moldura de reserva enquanto a imagem não existe) */
 function cardHTML(c) {
