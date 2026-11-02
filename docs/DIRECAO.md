@@ -13,7 +13,7 @@ Protótipo: [`prototypes/round3/index.html`](../prototypes/round3/index.html), n
 - **Topo:** título à esquerda ("Oi, Lia!", ou voltar + título) e o botão **Loja** à direita. Não há contador de cartas.
 - **Navegação:** barra **Centro**. O Álbum é um mini fichário holográfico que salta da barra, entre Trocas e Amigos.
 - **Material:** vinil fofinho, com gradiente sutil de cima para baixo, contorno preto de 2dp e degrau roxo-escuro (#2A1A7A) no lugar de sombra.
-- **Holo só onde há ação:** item ativo da navegação, botão principal, contador da coleção, avatar e borda do sheet. O gradiente é `#FFB3D9 → #D9B8FF → #A9DCFF → #B4F5DC → #FFF0A8` e se desloca com o toque.
+- **Holo só onde há ação:** item ativo da navegação, botão principal, botão Loja e borda do sheet. O gradiente é `#FFB3D9 → #D9B8FF → #A9DCFF → #B4F5DC → #FFF0A8` e se desloca com o toque.
 - **Fundo:** lilás-claro (#F1ECFF → #E3EDFF), com manchas suaves de rosa, azul e menta.
 - **Texto:** preto sobre o holo. Branco com contorno preto só nos títulos sobre a capa.
 
