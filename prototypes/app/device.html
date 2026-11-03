@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Meu Álbum</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Fredoka:wght@500;600&family=Nunito:wght@600;700;800;900&display=swap">
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="album.css">
+<link rel="stylesheet" href="r3.css">
+<link rel="stylesheet" href="app.css">
+<style>
+  /* Modo aparelho: sem moldura, sem barras falsas; a tela de 384dp escala para a largura do celular */
+  html, body { height: 100%; overflow: hidden; background: #f1ecff; overscroll-behavior: none; -webkit-tap-highlight-color: transparent; user-select: none; }
+  .device-mode #slot { position: relative; margin: 0 auto; }
+  .device-mode #device { position: absolute; left: 0; top: 0; width: 384px; height: 772px; padding: 0; background: none; box-shadow: none; border-radius: 0; transform-origin: 0 0; }
+  .device-mode .screen { width: 384px; height: 772px; border-radius: 0; box-shadow: none !important; grid-template-rows: 0 64px 1fr 80px 0; }
+  /* Teclado aberto: a barra de navegação sai e o conteúdo usa a altura toda */
+  .device-mode .screen.kb { grid-template-rows: 0 64px 1fr 0 0; }
+  .device-mode .screen.kb .navbar { visibility: hidden; overflow: hidden; }
+  /* Em telas mais altas, o álbum fica centralizado na área disponível */
+  .device-mode .stage.v1 > * { margin-top: var(--stage-dy, 0px); }
+  .device-mode .statusbar, .device-mode .gesture { visibility: hidden; overflow: hidden; }
+  .device-mode .snack { bottom: 92px; }
+</style>
+<script>window.CARD_BASE = 'https://images.pokemontcg.io/sv3pt5/';</script>
+</head>
+<body class="device-mode">
+<div id="slot"><div id="device"><div class="screen" id="screen"></div></div></div>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <linearGradient id="r3dVivid" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ff5fa2"/><stop offset=".3" stop-color="#9b6bff"/><stop offset=".55" stop-color="#2fa8ff"/><stop offset=".8" stop-color="#2fd39a"/><stop offset="1" stop-color="#ffcf3f"/></linearGradient>
+    <linearGradient id="metal" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset=".45" stop-color="#bcc4d0"/><stop offset=".6" stop-color="#7d8796"/><stop offset="1" stop-color="#e9eef4"/></linearGradient>
+  </defs>
+</svg>
+<script src="core.js"></script>
+<script src="r3-cards.js"></script>
+<script src="catalog.js"></script>
+<script src="r3-data.js"></script>
+<script src="r3.js"></script>
+<script src="state.js"></script>
+<script src="search.js"></script>
+<script src="screens.js"></script>
+<script src="game.js"></script>
+<script src="auth.js"></script>
+<script src="album.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
