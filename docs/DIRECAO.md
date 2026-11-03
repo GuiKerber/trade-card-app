@@ -10,8 +10,8 @@ Protótipo: [`prototypes/round3/index.html`](../prototypes/round3/index.html), n
 - **Interior:** folhas grafite (#14121B) com 9 bolsos de plástico brilhante. As cartas reais ficam em miniatura, e as repetidas ganham o selo ×N.
 
 ## Interface
-- **Topo:** título à esquerda ("Oi, Lia!", ou voltar + título) e o botão **Loja** à direita. Não há contador de cartas.
-- **Navegação:** barra **Centro**. O Álbum é um mini fichário holográfico que salta da barra, entre Trocas e Amigos.
+- **Topo:** título à esquerda ("Oi, Lia!", ou voltar + título) e o **avatar** da criança à direita, que abre **Sua conta**. Não há contador de cartas.
+- **Navegação:** barra **Centro** com 4 destinos: Trocas e Amigos à esquerda, **Álbum** no centro (mini fichário holográfico que salta da barra, liso, sem ícone dentro) e **Conquistas** à direita.
 - **Material:** vinil fofinho, com gradiente sutil de cima para baixo, contorno preto de 2dp e degrau roxo-escuro (#2A1A7A) no lugar de sombra.
 - **Holo só onde há ação:** item ativo da navegação, botão principal, botão Loja e borda do sheet. O gradiente é `#FFB3D9 → #D9B8FF → #A9DCFF → #B4F5DC → #FFF0A8` e se desloca com o toque.
 - **Fundo:** lilás-claro (#F1ECFF → #E3EDFF), com manchas suaves de rosa, azul e menta.
@@ -22,6 +22,29 @@ Protótipo: [`prototypes/round3/index.html`](../prototypes/round3/index.html), n
 - Embaixo ficam o nome, a dica e os botões **Pôr pra troca** e **Guardar**.
 - **Tocar vira a carta:** o verso mostra o anúncio (coleção, número, raridade, variante, condição, idioma, ilustrador e quantidade).
 - **Arrastar para baixo fecha.** A carta segue o dedo e volta com mola se for solta antes de 100dp.
+
+## Troca
+- **Pedido em etapas:** uma pergunta por vez (carta sua → onde → que dia → tudo certo?). Tocar numa opção avança sozinho; a barra de 3 partes mostra o passo, a seta volta e "Mudar" reabre um passo. Não há período (manhã/tarde): só o dia.
+- **Cartões de pedido:** cada carta ocupa metade do cartão, com a carta em cima e "Você dá / Pikachu" embaixo. O ícone de troca fica no meio, entre as duas.
+- **Já trocamos:** abre uma tela cheia escura com raios holográficos. A sua carta começa embaixo e a do amigo em cima; as duas se cruzam no meio com um clarão, a sua sai pelo topo e a nova cresce no centro com brilho. Depois vem "Troca feita!", o progresso da próxima insígnia (ou a insígnia nova) e confete. Com "remover animações", aparece direto o resultado.
+
+## Conquistas
+- Três abas: **Ranking**, **Insígnias** e **Loja**.
+- **Ranking:** pódio com os 3 que mais trocaram e a lista completa. Só aparecem a criança e os amigos dela, nunca desconhecidos.
+- **Insígnias:** uma a cada marco de trocas: Pedra (10), Água (25), Raio (50), Planta (75), Psíquica (100), Fogo (150), Terra (200) e Dragão (300). São desenhos originais: uma forma por tipo (hexágono, gota, estrela, flor, círculo, chama, escudo e losango) com o ícone do tipo, contorno preto e degrau roxo. As bloqueadas ficam cinza com cadeado, e a próxima tem borda tracejada e barra de progresso.
+- **Loja:** a mesma loja de antes, agora dentro de Conquistas. Tem 18 capas (8 com **arte inteira de Pokémon**, recortada de cartas Illustration Rare sem o texto, e 10 holográficas) e 10 adesivos.
+
+## Conta e login
+- **Boas-vindas:** leque com 3 cartas, o nome **Meu Álbum** (provisório), **Continuar com Google**, **Entrar com email** e **Criar conta**.
+- **Entrar:** email e senha (com mostrar/esconder), "Esqueci minha senha" com link por email e reenvio em 30 s.
+- **Criar conta (4 passos):** idade → email e senha → código de 6 números → apelido e cor do avatar. Abaixo de 13 anos entra "Chame um adulto": a conta é do adulto, com o email dele e o aceite de responsável (LGPD, art. 14). O Google também serve para o adulto.
+- **Apelido:** só letras, de 2 a 12. O app pede para não usar sobrenome, telefone nem endereço.
+- **Sua conta:** avatar, apelido, código de amigo, números (trocas, cartas, amigos), forma de entrar, **Área do adulto** (com pergunta de adulto antes) e **Sair da conta**.
+- No protótipo, nenhum dado sai do aparelho: o login fica guardado só no navegador ou no APK.
+
+## Foto da carta
+- No APK, as fotos vêm da internet (images.pokemontcg.io), de qualquer coleção.
+- Quando a foto não carrega (sem internet, ou no link do protótipo no Claude, que bloqueia imagens de fora), aparece uma moldura com a cor do tipo, o nome, uma Poké Ball e o número com a sigla da coleção.
 
 ## Painéis (bottom sheets)
 Todo painel segue o dedo quando arrastado pela alça ou pelo título. Ele fecha se passar de 28% da altura ou se o gesto for rápido; senão, volta com mola.

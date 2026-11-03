@@ -39,10 +39,10 @@ Primeira versão de todos os textos da interface, para crianças de 6 a 12 anos 
 
 | Lugar | Texto |
 |---|---|
-| Barra de navegação (Centro) | Trocas · **Álbum** (mini fichário no meio) · Amigos |
-| Botão do topo direito | Loja |
-| Título da home | Oi, Lia! |
-| Títulos das telas | Trocas · Amigos · Loja · Folha 1 |
+| Barra de navegação (Centro) | Trocas · Amigos · **Álbum** (mini fichário no meio, sem ícone dentro) · Conquistas |
+| Botão do topo direito | Avatar com a inicial (acessibilidade: Sua conta) |
+| Título da home | Oi, Lia! (o apelido escolhido na conta) |
+| Títulos das telas | Trocas · Amigos · Conquistas · Sua conta · Folha 1 |
 | Contador | Não existe: o álbum é infinito, sem total de cartas |
 | Voltar (acessibilidade) | Fechar o álbum · Voltar |
 
@@ -56,7 +56,7 @@ Primeira versão de todos os textos da interface, para crianças de 6 a 12 anos 
 | Dica (primeira vez que abre) | Dica: segure uma carta e arraste para mudar de lugar. |
 | Bolso livre (acessibilidade) | Bolso livre. Toque para guardar uma carta. |
 | Carta no bolso (acessibilidade) | Pikachu, 025/165, Comum, você tem 3. Segure para mudar de lugar. |
-| Contracapa | Este álbum é da Lia |
+| Contracapa | Este álbum é de Lia |
 | Folha completa | Completei! |
 
 ### Carta em foco
@@ -153,12 +153,17 @@ Depois:
 
 | Elemento | Texto |
 |---|---|
+Uma pergunta por vez. Ao tocar numa opção, o pedido avança sozinho; a barra de 3 partes mostra o passo.
+
+| Elemento | Texto |
+|---|---|
 | Título | Trocar com Theo |
 | Rótulos | Você recebe · Você dá |
-| Passos | 1. Escolha uma carta sua · 2. Onde · 3. Quando |
-| Lugares | Na escola · No parque · No clube |
-| Dias | Amanhã · Sábado · Domingo |
-| Período | De manhã · De tarde |
+| Passo 1 | Qual carta sua você dá? |
+| Passo 2 | Onde vocês vão se encontrar? · Na escola · No parque · No clube |
+| Passo 3 | Que dia? · Amanhã · Sábado · Domingo (sem período) |
+| Confirmação | Tudo certo? · Onde: Na escola · Quando: Sábado · Mudar |
+| Voltar (acessibilidade) | Voltar · Trocar a carta que você dá |
 | Sem carta pra troca | Você ainda não pôs cartas pra troca. No álbum, toque numa carta e escolha **Pôr pra troca**. |
 | Botão | Enviar pedido |
 | Aviso | Um adulto recebe um aviso para confirmar o encontro. |
@@ -168,12 +173,25 @@ Depois:
 
 | Estado | Título | Botões | Snackbar |
 |---|---|---|---|
-| Novo | Bia quer trocar com você | Recusar · Aceitar | Combinado! Na escola, Amanhã · manhã. / Pedido recusado. Tudo bem! |
-| Combinada | Troca combinada com Theo | Desmarcar · Já trocamos | Gengar foi pro seu álbum! / Troca desmarcada. Avisamos Theo. |
+| Novo | Bia quer trocar com você | Recusar · Aceitar | Combinado! Na escola, Amanhã. / Pedido recusado. Tudo bem! |
+| Combinada | Troca combinada com Theo | Desmarcar · Já trocamos | Troca desmarcada. Avisamos Theo. |
 | Enviado | Esperando Davi responder | Cancelar pedido | Pedido cancelado. |
 | Seções | Novos pedidos · Combinadas · Enviados | | |
 | Vazio | Nenhum pedido por enquanto. Veja as ofertas dos seus amigos! | | |
-| Linha de encontro | No parque · Sábado · tarde | | |
+| Cartão | Você dá · Pikachu / Você recebe · Gengar (carta em cima, texto embaixo, metade do cartão para cada) | | |
+| Linha de encontro | No parque · Sábado | | |
+
+### Troca feita (tela cheia)
+
+| Elemento | Texto |
+|---|---|
+| Antes de cruzar | Theo dá · Você dá |
+| Título | Troca feita! |
+| Texto | Raichu foi pro seu álbum. |
+| Progresso | +1 troca · faltam 15 para a insígnia Água |
+| Insígnia nova | Nova insígnia! · Pedra |
+| Botão | Legal! |
+| Acessibilidade | Troca feita. Raichu foi pro seu álbum. |
 
 ## Amigos
 
@@ -197,18 +215,36 @@ Depois:
 | Sucesso | Lucas agora é seu amigo! Já dá pra ver as cartas pra troca. |
 | Erros | Digite o código do seu amigo. · Esse é o seu código! Digite o do seu amigo. · Vocês já são amigos. · Não achamos esse código. Confira as letras e os números. |
 
-## Loja
+## Conquistas
 
 | Elemento | Texto |
 |---|---|
-| Abas | Capas · 10 · Adesivos · 10 |
+| Abas | Ranking · Insígnias · Loja |
+| Resumo | 9 trocas feitas · Próxima insígnia · Pedra · 9 de 10 · falta 1 troca |
+| Ranking | Quem mais trocou · 1º · Theo · Insígnia Água · 31 trocas · Lia (você) · Sem insígnia ainda |
+| Segurança | O ranking mostra só você e seus amigos. |
+| Insígnias | Insígnias · 1 de 8 · Conquistada! · 25 trocas |
+| Dica | Cada troca feita com um amigo conta. Toque numa insígnia para ver como ganhar. |
+| Insígnia aberta | Insígnia Água · Ganhe fazendo **25 trocas** com seus amigos. · 10 de 25 · faltam 15 · Bora trocar! |
+| Insígnia ganha | Insígnia Pedra · Você ganhou ao fazer **10 trocas** com seus amigos. · Legal! |
+
+**Insígnias:** Pedra (10 trocas), Água (25), Raio (50), Planta (75), Psíquica (100), Fogo (150), Terra (200), Dragão (300).
+
+## Loja (aba de Conquistas)
+
+| Elemento | Texto |
+|---|---|
+| Filtros | Capas · 18 · Adesivos · 10 |
+| Grupos de capas | Pokémon · Holográficas |
 | Dicas | Toque numa capa para provar. · Arraste os adesivos na capa. |
 | Estado da capa | Usando · Usar · R$ 3,90 |
 | Estado do adesivo | Colar na capa · Na capa · colar outro · R$ 1,90 |
 | Botão | Tirar adesivo |
 | Snackbar | Capa Aurora no seu álbum! · Adesivo colado! Arraste para onde quiser. · Adesivo tirado da capa. · A capa já tem 6 adesivos. Tire um para colar outro. |
 
-**Capas:** Arco-íris (grátis), Aurora (grátis), Pôr do sol, Oceano, Galáxia, Algodão-doce, Floresta, Vulcão, Gelo, Ouro.
+**Capas Pokémon** (arte inteira de uma carta Illustration Rare): Pikachu, Charizard, Eevee, Umbreon, Mew, Charmander, Squirtle, Bulbasaur.
+
+**Capas holográficas:** Arco-íris (grátis), Aurora (grátis), Pôr do sol, Oceano, Galáxia, Algodão-doce, Floresta, Vulcão, Gelo, Ouro.
 
 **Adesivos:** Chama, Gota, Folha, Raio holo e Estrela holo (grátis), Fantasminha, Coração holo, Coroa, Lua, Nuvem.
 
@@ -222,12 +258,48 @@ Depois:
 | Botão | Agora não |
 | Resposta errada | Essa parte é para um adulto. Tente com alguém junto. |
 
+## Entrar e criar conta
+
+O nome do app nas telas é **Meu Álbum** (provisório).
+
+| Tela | Texto |
+|---|---|
+| Boas-vindas | Meu Álbum · Guarde suas cartas num álbum de verdade e combine trocas com seus amigos. · Continuar com Google · Entrar com email · Ainda não tem conta? Criar conta |
+| Legal | Ao continuar, você concorda com os Termos de Uso e a Política de Privacidade. |
+| Entrar | Entrar · Use o email e a senha da sua conta. · Email · Senha · Esqueci minha senha · Entrar · ou · Continuar com Google |
+| Erros | Confira o email. · A senha tem pelo menos 6 letras ou números. Confira e tente de novo. |
+| Esqueci a senha | Esqueci minha senha · Digite o email da conta. Vamos mandar um link para você criar uma senha nova. · Enviar link |
+| Link enviado | Olhe seu email · Mandamos um link para an••••@gmail.com. Abra o link para criar uma senha nova. Se não achar, olhe no spam. · Voltar para entrar · Não chegou? Reenviar · Reenviar em 30s |
+| Idade (passo 1 de 4) | Quantos anos você tem? · Perguntamos para deixar o app seguro para você. · 6 a 12 · 13 ou mais |
+| Menos de 13 anos | Chame um adulto · Para criar sua conta, um adulto da sua família precisa ajudar. É rapidinho. · Sou o adulto · Agora não |
+| Conta (passo 2) | Conta do adulto · Use o **seu** email. É por ele que você aprova amigos, encontros e compras da criança. / Crie sua conta · Escolha o email e uma senha. |
+| Aceites | Li e aceito os Termos de Uso e a Política de Privacidade. · Sou o responsável e autorizo esta criança a usar o Meu Álbum. |
+| Código (passo 3) | Confirme o email · Digite o código de 6 números que mandamos para an••@email.com. · Reenviar código |
+| Perfil (passo 4) | Como seus amigos vão te chamar? · Apelido · Use um apelido. Não coloque sobrenome, telefone ou endereço. · Pronto! |
+| Erro do apelido | Use só letras no apelido, sem números nem símbolos. |
+| Fim | Tudo pronto, Estrela! · Seu código de amigo é ESTRELA-264. Mostre para um amigo quando estiverem juntos. · Mandamos um email para o adulto confirmar a conta. · Abrir meu álbum |
+| Google | Escolha uma conta · para continuar no Meu Álbum · Usar outra conta · O Google vai compartilhar seu nome, email e foto com o Meu Álbum. |
+| Ao entrar | Oi, Lia! Seu álbum está aqui. |
+
+## Sua conta
+
+| Elemento | Texto |
+|---|---|
+| Cartão | Lia · Código de amigo · ESTRELA-264 · Editar |
+| Números | 9 trocas · 21 cartas · 4 amigos |
+| Conta | Entrou com Google / Entrou com email · an••••@gmail.com |
+| Linhas | Área do adulto (Aprovações e avisos) · Termos e privacidade |
+| Área do adulto | Só para adultos · Quanto é 7 + 8? → Aprovar cada encontro de troca · Aprovar amigos novos · Receber avisos por email · Excluir conta · Pronto |
+| Editar perfil | Editar perfil · Apelido · Cancelar · Salvar · Perfil salvo! |
+| Sair | Sair da conta · Sair da conta? · Seu álbum continua guardado. Para voltar, entre com o mesmo email ou com o Google. · Ficar · Sair |
+
 ## Mensagens para o adulto (notificação ou e-mail)
 
 | Momento | Texto |
 |---|---|
 | Amigo novo | Lia quer adicionar Lucas (NUVEM-357) como amigo. Vocês conhecem essa criança? **Aprovar** · **Recusar** |
-| Troca combinada | Lia combinou uma troca com Theo: Charmander por Raichu, no parque, sábado à tarde. Confirme se ela pode ir. **Confirmar** · **Não pode** |
+| Troca combinada | Lia combinou uma troca com Theo: Charmander por Raichu, no parque, no sábado. Confirme se ela pode ir. **Confirmar** · **Não pode** |
+| Conta nova | Você criou a conta de Estrela no Meu Álbum. Confirme seu email para ativar. **Confirmar email** |
 | Compra | Lia quer a capa Pôr do sol (R$ 3,90). **Comprar** · **Agora não** |
 | Troca feita | Lia registrou a troca com Theo. Ela recebeu Raichu e deu Charmander. |
 

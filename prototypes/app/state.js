@@ -30,13 +30,14 @@ const ME = { name: 'Lia', code: 'ESTRELA-264', color: '#FFD6E8' };
 const PLACES = { escola: 'Na escola', parque: 'No parque', clube: 'No clube' };
 const DAYS = ['Amanhã', 'Sábado', 'Domingo'];
 let FRIENDS, REQS, WISH;
-const NEW_FRIEND = { id: 'lucas', name: 'Lucas', code: 'NUVEM-357', color: '#FFC8E6', offers: [199, 35] };
+const NEW_FRIEND = { id: 'lucas', name: 'Lucas', code: 'NUVEM-357', color: '#FFC8E6', trades: 6, offers: [199, 35] };
 function resetSocial() {
+  ME.trades = 9;   // a próxima troca dá a insígnia Pedra
   FRIENDS = [
-    { id: 'theo', name: 'Theo', code: 'SOL-482', color: '#FFE38A', offers: [3, 26, 39] },
-    { id: 'bia', name: 'Bia', code: 'LUA-731', color: '#E3CCFF', offers: [94, 133, 52] },
-    { id: 'davi', name: 'Davi', code: 'RAIO-205', color: '#A9DCFF', offers: [168, 129, 8] },
-    { id: 'manu', name: 'Manu', code: 'FOLHA-918', color: '#B4F5DC', offers: [150, 54] },
+    { id: 'theo', name: 'Theo', code: 'SOL-482', color: '#FFE38A', trades: 31, offers: [3, 26, 39] },
+    { id: 'bia', name: 'Bia', code: 'LUA-731', color: '#E3CCFF', trades: 18, offers: [94, 133, 52] },
+    { id: 'davi', name: 'Davi', code: 'RAIO-205', color: '#A9DCFF', trades: 12, offers: [168, 129, 8] },
+    { id: 'manu', name: 'Manu', code: 'FOLHA-918', color: '#B4F5DC', trades: 4, offers: [150, 54] },
   ];
   REQS = [
     { id: 1, friend: 'bia', give: 25, get: 94, where: 'escola', when: 'Amanhã', status: 'new' },
@@ -115,7 +116,7 @@ function coverFaceHTML() {
     <div class="r3c-ball">${R3_BALL}</div><div class="r3c-word">MEU ÁLBUM</div>
     ${COVER.stickers.map(stkOnCover).join('')}</div>`;
 }
-R3_COVERS.holo = () => `${coverFaceHTML()}<div class="face r3c-ci"><div class="v1-plate"><small>Este álbum é da</small><b>Lia</b></div></div>`;
+R3_COVERS.holo = () => `${coverFaceHTML()}<div class="face r3c-ci"><div class="v1-plate"><small>Este álbum é de</small><b>${ME.name}</b></div></div>`;
 
 // Selo "pra troca" no bolso
 const TRADE_ICO = '<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8.5h14.5M15 4.5l4 4-4 4M20 15.5H5.5M9 11.5l-4 4 4 4"/></svg>';

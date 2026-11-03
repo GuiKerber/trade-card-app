@@ -11,14 +11,19 @@ App Android para crianças colecionarem cartas num álbum que parece de verdade 
 
 **Fase 2 — Amigos e trocas**
 - Amigos adicionados só pessoalmente, por QR Code
-- Pedidos de troca com cartas, lugar e horário escolhidos de listas prontas
+- Pedidos de troca em etapas: carta, lugar e dia escolhidos de listas prontas
 - Sem chat e sem texto livre entre crianças
 - Aprovação opcional dos pais
+
+**Fase 3 — Conquistas e conta**
+- Ranking de trocas só entre amigos e insígnias a cada marco de trocas
+- Loja com capas holográficas, capas com arte de Pokémon e adesivos
+- Login por email ou Google, com um adulto criando a conta de quem tem menos de 13 anos
 
 ## Design
 
 - [`docs/DIRECAO.md`](docs/DIRECAO.md) — **direção escolhida**: interface de vinil holográfico + álbum em foil holográfico
-- [`prototypes/app/index.html`](prototypes/app/index.html) — **app v1**: álbum, trocas, amigos e loja na direção escolhida
+- [`prototypes/app/index.html`](prototypes/app/index.html) — **app v1**: login, álbum, trocas, amigos e conquistas (ranking, insígnias e loja) na direção escolhida
 - [`docs/TEXTOS.md`](docs/TEXTOS.md) — textos do app, v1 (voz e tom, glossário, telas e mensagens para adultos)
 - [`docs/DESIGN.md`](docs/DESIGN.md) — design system da rodada 1 (Material 3 Expressive + referência Slush adaptada para crianças)
 - [`docs/REFERENCIAS.md`](docs/REFERENCIAS.md) — rodada 2: direção de arte a partir de Pokémon e apps de coleção, com fontes
@@ -28,7 +33,7 @@ App Android para crianças colecionarem cartas num álbum que parece de verdade 
 ## Dados
 
 - `scripts/build-catalog.py` gera `prototypes/app/catalog.js` com todas as coleções e cartas (só metadados) a partir de PokemonTCG/pokemon-tcg-data.
-- `scripts/fetch-card-images.sh` baixa as miniaturas da coleção 151 para ver o protótipo localmente (as imagens não ficam no repositório).
+- `scripts/fetch-card-images.sh` baixa as miniaturas da coleção 151 e as artes das capas Pokémon para ver o protótipo localmente (as imagens não ficam no repositório).
 
 ## Stack sugerida
 

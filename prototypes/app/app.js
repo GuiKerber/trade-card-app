@@ -4,13 +4,14 @@
   const W = 384, H = 820;
   const DEVICE = document.body.classList.contains('device-mode');
   const S = { tab: 'album', prev: 'album', ctrl: null, open: false, title: '', D: null, G: null, snackT: 0, lang: 'PT', nb: 'centro' };
-  const NAV = [['album', 'album', 'Álbum'], ['trade', 'trade', 'Trocas'], ['friends', 'friends', 'Amigos']];
+  const NAV = [['album', 'album', 'Álbum'], ['trade', 'trade', 'Trocas'], ['friends', 'friends', 'Amigos'], ['game', 'trofeu', 'Conquistas']];
   const NAVBARS = { centro: 'Centro (escolhida)', padrao: 'Padrão', pilula: 'Pílula', abas: 'Abas', adesivo: 'Adesivos' };
   const TAB_NOTES = {
     album: { t: 'Álbum', p: 'A criança decide a ordem: segura uma carta e arrasta para outro bolso, inclusive em outra folha (é só levar a carta até a borda). Bolso livre serve para guardar carta nova. O álbum é infinito, sempre com uma folha nova no fim.', try: ['Abra o álbum, segure a Charmander e solte no bolso da Bulbasaur: elas trocam de lugar.', 'Segure uma carta e leve até a borda direita para carregar para a próxima folha.', 'Toque num bolso livre e guarde a Venusaur ex.', 'Toque no Pikachu e use <b>Pôr pra troca</b>.'] },
     trade: { t: 'Trocas', p: 'Três abas: <b>Ofertas</b> mostra o que os amigos puseram pra troca (as que faltam no seu álbum vêm primeiro), <b>Procurar</b> busca uma carta pelo nome ou número, e <b>Pedidos</b> guarda os pedidos novos, as trocas combinadas e as enviadas.', try: ['Em Ofertas, toque na Venusaur ex de Theo, escolha uma carta sua, o lugar e o dia.', 'Em Pedidos, aceite o pedido de Bia e depois toque em <b>Já trocamos</b>: a Gengar entra no seu álbum.', 'Em Procurar, digite “char” ou “199”.'] },
     friends: { t: 'Amigos', p: 'O seu código (e o QR Code) e a lista de amigos. Amigos só entram pessoalmente e com aprovação de um adulto. Não tem chat.', try: ['Toque em <b>Adicionar amigo</b> e digite NUVEM-357.', 'Abra um amigo para ver as cartas que ele pôs pra troca.'] },
-    store: { t: 'Loja', p: '10 capas e 10 adesivos para colar na capa do álbum. Itens pagos pedem um adulto antes (porta de segurança para os pais). Nada é cobrado no protótipo.', try: ['Toque numa capa grátis (Aurora) para usar.', 'Em Adesivos, toque em Chama e arraste o adesivo na capa.', 'Toque numa capa paga para ver a pergunta para o adulto.'] },
+    game: { t: 'Conquistas', p: '<b>Ranking</b> de trocas só entre amigos, <b>Insígnias</b> a cada marco de trocas (10 Pedra, 25 Água, 50 Raio...) e a <b>Loja</b> com capas holográficas, capas com arte de Pokémon e adesivos. Itens pagos pedem um adulto antes.', try: ['Em Trocas › Pedidos, toque em <b>Já trocamos</b> na troca com Theo: é a 10ª troca e a insígnia Pedra aparece.', 'Em Insígnias, toque na Água para ver quanto falta.', 'Na Loja, prove a capa Pikachu (pede um adulto).'] },
+    account: { t: 'Sua conta', p: 'O avatar no topo abre a conta: apelido, cor, código de amigo, email e a área dos pais. Sair leva de volta para a tela de entrada.', try: ['Toque em <b>Sair da conta</b> e entre de novo com email ou Google.', 'Crie uma conta nova escolhendo uma idade abaixo de 13 anos para ver a parte do adulto.'] },
   };
 
   /* ---------- Tela ---------- */
@@ -34,7 +35,7 @@
     sheetDrag($('#sheet', screen));
   }
   function renderNav() {
-    const cur = S.tab === 'store' ? S.prev : S.tab;
+    const cur = S.tab === 'account' ? S.prev : S.tab;
     $$('.nav-item', screen).forEach(b => { const on = b.dataset.tab === cur; b.classList.toggle('active', on); b.toggleAttribute('aria-current', on); });
     const n = REQS.filter(r => r.status === 'new').length, bd = $('#nbadge', screen);
     bd.textContent = n; bd.hidden = !n;
@@ -42,17 +43,17 @@
   function renderAppbar() {
     const ab = $('#appbar', screen); if (!ab) return;
     const back = label => `<button class="icon-btn" id="abBack" aria-label="${label}">${ico('back', 24)}</button>`;
-    const store = `<button class="store-btn" id="abStore" aria-label="Abrir a loja">${ico('bag', 22)}<span>Loja</span></button>`;
-    let lead = '', title = { album: 'Oi, Lia!', trade: 'Trocas', friends: 'Amigos' }[S.tab], end = store;
-    if (S.tab === 'store') { lead = back('Voltar'); title = 'Loja'; end = ''; }
+    const me = `<button class="me-btn" id="abMe" aria-label="Sua conta">${avatar(ME, 40)}</button>`;
+    let lead = '', title = { album: `Oi, ${ME.name}!`, trade: 'Trocas', friends: 'Amigos', game: 'Conquistas' }[S.tab], end = me;
+    if (S.tab === 'account') { lead = back('Voltar'); title = 'Sua conta'; end = ''; }
     else if (S.tab === 'album' && S.open) { lead = back('Fechar o álbum'); title = S.title; }
     ab.innerHTML = `${lead}<div class="ab-title">${title}</div>${end}`;
-    const b = $('#abBack', ab); if (b) b.addEventListener('click', () => { if (S.D || S.G) return; S.tab === 'store' ? go(S.prev) : S.ctrl.close(); });
-    const s = $('#abStore', ab); if (s) s.addEventListener('click', () => go('store'));
+    const b = $('#abBack', ab); if (b) b.addEventListener('click', () => { if (S.D || S.G) return; S.tab === 'account' ? go(S.prev) : S.ctrl.close(); });
+    const s = $('#abMe', ab); if (s) s.addEventListener('click', () => go('account'));
   }
   function go(tab) {
     if (S.D) return; if (S.G) closeSheet();
-    if (tab === 'store' && S.tab !== 'store') S.prev = S.tab;
+    if (tab === 'account' && S.tab !== 'account') S.prev = S.tab;
     if (tab !== S.tab) buzz(6);
     S.tab = tab; S.open = false; mountTab();
   }
@@ -60,7 +61,7 @@
     const stage = $('#stage', screen);
     const fresh = stage.cloneNode(false); stage.replaceWith(fresh); fresh.removeAttribute('style');
     if (S.tab === 'album') { S.ctrl = mountAlbum(fresh, api); applySkin(fresh); }
-    else S.ctrl = { trade: mountTrades, friends: mountFriends, store: mountStore }[S.tab](fresh, api);
+    else S.ctrl = { trade: mountTrades, friends: mountFriends, game: mountGame, account: mountAccount }[S.tab](fresh, api);
     renderAppbar(); renderNav(); if (!DEVICE) renderNotes();
   }
   const api = {
@@ -68,6 +69,8 @@
     setTitle(t) { S.title = t; const el = $('.ab-title', screen); if (S.open && el) el.textContent = t; },
     openDetail, rectIn, confetti, toast, openSheet, closeSheet, sheetIs: g => S.G === g, tradeShow,
     refresh: () => { if (S.tab !== 'album') mountTab(); else renderNav(); },
+    remount: () => mountTab(), go: t => go(t), screen: () => screen,
+    rebuild: () => { if (S.G) closeSheet(); S.tab = 'album'; S.open = false; buildScreen(); mountTab(); },
     counter: () => { renderAppbar(); renderNav(); },
   };
   function rectIn(el) {
@@ -213,13 +216,16 @@
     requestAnimationFrame(step);
   }
   /* ---------- Troca feita: tela cheia com as duas cartas se cruzando no meio ---------- */
-  function tradeShow({ give, get, f }, done) {
+  function tradeShow({ give, get, f, badge, next }, done) {
     const ov = document.createElement('div');
     ov.className = 'tx'; ov.setAttribute('role', 'dialog'); ov.setAttribute('aria-modal', 'true'); ov.setAttribute('aria-label', `Troca feita. ${get.name} foi pro seu álbum.`);
     ov.innerHTML = `<i class="tx-bg"></i><i class="tx-rays"></i>
       <span class="tx-tag tx-tag-top">${avatar(f, 26)}${f.name} dá</span><span class="tx-tag tx-tag-bot">${avatar(ME, 26)}Você dá</span>
       <div class="tx-card tx-give">${cardHTML(give)}</div><div class="tx-card tx-get">${cardHTML(get)}<i class="tx-shine"></i></div><i class="tx-flash"></i>
-      <div class="tx-end"><h2>Troca feita!</h2><p><b>${get.name}</b> foi pro seu álbum.</p><button class="btn btn-filled tx-ok">Legal!</button></div>`;
+      <div class="tx-end"><h2>Troca feita!</h2><p><b>${get.name}</b> foi pro seu álbum.</p>
+        ${badge ? `<div class="tx-badge">${badgeSVG(badge, 58)}<span><small>Nova insígnia!</small><b>${badge.name}</b></span></div>`
+          : next ? `<p class="tx-prog">+1 troca · ${next.need - ME.trades === 1 ? 'falta 1' : `faltam ${next.need - ME.trades}`} para a insígnia ${next.name}</p>` : ''}
+        <button class="btn btn-filled tx-ok">Legal!</button></div>`;
     screen.appendChild(ov); S.T = ov;
     const H = screen.offsetHeight, D = Math.round(Math.min(200, H * .24)), cardH = 150 * 88 / 63 * .85;
     $('.tx-tag-top', ov).style.top = `${Math.round(H / 2 - D - cardH / 2 - 44)}px`;
@@ -268,7 +274,7 @@
   }
   function renderNotes() {
     const n = TAB_NOTES[S.tab];
-    $('#notes').innerHTML = `<div class="ncard"><div class="n-top"><span class="n-num">${ico({ album: 'album', trade: 'trade', friends: 'friends', store: 'bag' }[S.tab], 26)}</span><div><h2>${n.t}</h2><p class="n-tag">Tela atual do protótipo</p></div></div><p>${n.p}</p><h3>Experimente</h3><ol>${n.try.map(x => `<li>${x}</li>`).join('')}</ol></div>`;
+    $('#notes').innerHTML = `<div class="ncard"><div class="n-top"><span class="n-num">${ico({ album: 'album', trade: 'trade', friends: 'friends', game: 'trofeu', account: 'friends' }[S.tab], 26)}</span><div><h2>${n.t}</h2><p class="n-tag">Tela atual do protótipo</p></div></div><p>${n.p}</p><h3>Experimente</h3><ol>${n.try.map(x => `<li>${x}</li>`).join('')}</ol></div>`;
   }
   document.addEventListener('click', e => {
     const nb = e.target.closest('#segs [data-nb]'); if (!nb) return;
@@ -280,7 +286,7 @@
     if (e.target.closest && e.target.closest('input,textarea')) return;
     if (e.key === 'ArrowRight') S.ctrl.key(1); if (e.key === 'ArrowLeft') S.ctrl.key(-1);
   });
-  if (!DEVICE) $('#reset').addEventListener('click', () => { resetData(); resetTrade(); resetSocial(); resetStore(); resetAlbum(); Object.assign(TRADES_UI, { tab: 'ofertas', q: '', miss: false }); STORE_UI.sel = -1; S.tab = 'album'; buildScreen(); mountTab(); });
+  if (!DEVICE) $('#reset').addEventListener('click', () => { resetData(); resetTrade(); resetSocial(); resetStore(); resetAlbum(); Object.assign(TRADES_UI, { tab: 'ofertas', q: '', miss: false }); STORE_UI.sel = -1; GAME_UI.tab = 'ranking'; S.tab = 'album'; buildScreen(); mountTab(); authBoot(api); });
   let baseH = 0;
   function fit() {
     if (DEVICE) {
@@ -302,13 +308,14 @@
   window.addEventListener('resize', fit);
   // Botão voltar do Android (chamado pelo app nativo)
   window.appBack = () => {
+    if (window.authBack && window.authBack()) return true;
     if (S.T) { S.txClose(); return true; }
     if (S.D) { closeDetail('back'); return true; }
     if (S.G) { closeSheet(); return true; }
-    if (S.tab === 'store') { go(S.prev); return true; }
+    if (S.tab === 'account') { go(S.prev); return true; }
     if (S.tab === 'album' && S.open) { S.ctrl.close(); return true; }
     if (S.tab !== 'album') { go('album'); return true; }
     return false;
   };
-  fit(); buildScreen(); if (!DEVICE) renderTabs(); mountTab();
+  fit(); buildScreen(); if (!DEVICE) renderTabs(); mountTab(); authBoot(api);
 })();

@@ -119,7 +119,9 @@ function mountTrades(stage, api) {
       f.offers = f.offers.filter(x => x !== get.n);
       if (!give.have) albumRemove(give.n); albumPlace(get.n);
       REQS.splice(REQS.indexOf(rq), 1);
-      api.counter(); api.tradeShow({ give, get, f });
+      const before = ME.trades; ME.trades += 1; f.trades += 1;
+      const badge = BADGES.find(b => b.need > before && b.need <= ME.trades);
+      api.counter(); api.tradeShow({ give, get, f, badge, next: nextBadge(ME.trades) });
     }
     render();
   });
@@ -191,16 +193,16 @@ function gateSheet(api, item, onOk) {
   });
 }
 const STORE_UI = { tab: 'capas', sel: -1 };
-function mountStore(stage, api) {
+function mountStore(stage, api, top = '') {
   stage.className = 'stage page';
   const skinTile = k => `<button class="sitem${COVER.skin === k.id ? ' on' : ''}" data-skin="${k.id}"><span class="sw${k.art ? ' art' : ''}" style="--f1:${k.f[0]};--f2:${k.f[1]};--f3:${k.f[2]};--f4:${k.f[3]};--f5:${k.f[4]};--spine:${k.spine}${k.art ? `;--art:url('${artSrc(k.art)}')${k.crop ? `;--art-zoom:${k.crop[0]};--art-pos:${k.crop[1]}` : ''}` : ''}"><i></i></span><b>${k.name}</b><em>${COVER.skin === k.id ? 'Usando' : k.owned ? 'Usar' : `${ico('lock', 14)} ${priceStr(k.price)}`}</em></button>`;
   const stkTile = s => { const n = COVER.stickers.filter(x => x.id === s.id).length; return `<button class="sitem" data-stk="${s.id}"><span class="sa">${sticker(s.icon, 50, s.fill)}</span><b>${s.name}</b><em>${s.owned ? (n ? `Na capa · colar outro` : 'Colar na capa') : `${ico('lock', 14)} ${priceStr(s.price)}`}</em></button>`; };
   const render = () => {
     const selOn = STORE_UI.sel >= 0 && STORE_UI.sel < COVER.stickers.length;
-    stage.innerHTML = `<div class="pg st"><div class="pg-body">
+    stage.innerHTML = `<div class="pg st">${top}<div class="pg-body">
       <div class="st-prev"><div class="st-box"><i class="st-spine"></i><div class="st-cover" id="stc">${coverFaceHTML()}</div></div>
         <div class="st-tools">${selOn ? `<button class="btn-s ghost" data-rm>${ico('x', 16)} Tirar adesivo</button>` : `<p class="st-hint">${STORE_UI.tab === 'adesivos' ? 'Arraste os adesivos na capa.' : 'Toque numa capa para provar.'}</p>`}</div></div>
-      <div class="segin" role="tablist" aria-label="Loja">${[['capas', `Capas · ${SKINS.length}`], ['adesivos', `Adesivos · ${STICKERS.length}`]].map(([k, l]) => `<button role="tab" data-st="${k}" aria-selected="${k === STORE_UI.tab}">${l}</button>`).join('')}</div>
+      <div class="chips st-tabs" role="group" aria-label="Loja">${[['capas', `Capas · ${SKINS.length}`], ['adesivos', `Adesivos · ${STICKERS.length}`]].map(([k, l]) => `<button class="fchip" data-st="${k}" aria-pressed="${k === STORE_UI.tab}">${l}</button>`).join('')}</div>
       <div class="sgrid">${STORE_UI.tab === 'capas' ? `<h3 class="pg-h sg-h">Pokémon</h3>${SKINS.filter(k => k.art).map(skinTile).join('')}<h3 class="pg-h sg-h">Holográficas</h3>${SKINS.filter(k => !k.art).map(skinTile).join('')}` : STICKERS.map(stkTile).join('')}</div>
     </div></div>`;
     applySkin($('.st-box', stage));
