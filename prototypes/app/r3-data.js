@@ -34,11 +34,15 @@ const numStr = c => `${fmtNum(String(c.number ?? c.n))}/${setOf(c).total}`;
 const imgSrc = c => (window.CARD_BASE || !REAL_IDS.has(c.id) ? `https://images.pokemontcg.io/${c.set || 'sv3pt5'}/${c.number || c.n}.png` : `cards/${c.id}.webp`);
 
 /* Miniatura da carta real (com moldura de reserva enquanto a imagem não existe) */
+const TCOL = { planta: '#6CC35A', fogo: '#F27A3C', agua: '#4EA3E6', eletrico: '#F5CF2E', psiquico: '#B37AD6', lutador: '#C9834E', sombrio: '#4A5664', metal: '#A3AEBB', dragao: '#BFA23A', fada: '#EE8FC4', incolor: '#CFCAB8', treinador: '#93A3B8', energia: '#C2BBD6' };
+const FB_BALL = '<svg class="fb-ball" viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="17"/><path d="M3 20h11.5M25.5 20H37"/><circle cx="20" cy="20" r="5.5"/></svg>';
+/* Moldura de reserva: aparece quando a foto da carta não carrega (sem internet ou bloqueada) */
+const fbHTML = c => `<span class="rc-fb" style="--tc:${TCOL[c.type] || TCOL.incolor}"><b>${c.name}</b><span class="fb-art">${FB_BALL}</span><em>${numStr(c)}<small>${setOf(c).code || ''}</small></em></span>`;
 function cardHTML(c) {
-  return `<div class="rcard" data-r="${c.r}"><span class="rc-fb"><b>${c.name}</b><em>${numStr(c)}</em></span><img src="${imgSrc(c)}" alt="${c.name}" draggable="false" onerror="this.remove()">${c.holo ? '<i class="holo"></i>' : ''}<i class="tc-glare"></i></div>`;
+  return `<div class="rcard" data-r="${c.r}">${fbHTML(c)}<img src="${imgSrc(c)}" alt="${c.name}" draggable="false" onerror="this.remove()">${c.holo ? '<i class="holo"></i>' : ''}<i class="tc-glare"></i></div>`;
 }
 function ph(c) {
-  return `<span class="ph rghost"><span class="rcard" data-r="${c.r}"><span class="rc-fb"><b>${c.name}</b><em>${numStr(c)}</em></span><img src="${imgSrc(c)}" alt="" draggable="false" onerror="this.remove()"></span><em class="ph-num">${pad(c.n)}</em></span>`;
+  return `<span class="ph rghost"><span class="rcard" data-r="${c.r}">${fbHTML(c)}<img src="${imgSrc(c)}" alt="" draggable="false" onerror="this.remove()"></span><em class="ph-num">${pad(c.n)}</em></span>`;
 }
 function badges(c) {
   if (!c.have) return '';

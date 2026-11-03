@@ -66,7 +66,7 @@
   const api = {
     setOpen(open, title = '') { S.open = open; S.title = title; renderAppbar(); },
     setTitle(t) { S.title = t; const el = $('.ab-title', screen); if (S.open && el) el.textContent = t; },
-    openDetail, rectIn, confetti, toast, openSheet, closeSheet,
+    openDetail, rectIn, confetti, toast, openSheet, closeSheet, sheetIs: g => S.G === g, tradeShow,
     refresh: () => { if (S.tab !== 'album') mountTab(); else renderNav(); },
     counter: () => { renderAppbar(); renderNav(); },
   };
@@ -83,7 +83,7 @@
     const sc = () => $('#scrim', screen);
     sh.addEventListener('pointerdown', e => {
       if (!S.G) return;
-      const head = e.target.closest('.sh-handle, .sh-title, .ls-set, .fs-head');
+      const head = e.target.closest('.sh-handle, .sh-title, .ps-top, .ls-set, .fs-head');
       if (!head && (sh.scrollTop > 0 || e.target.closest('input, .ps-mine, .chips'))) return;
       d = { y0: e.clientY, id: e.pointerId, dy: 0, on: false, lastY: e.clientY, lastT: performance.now(), v: 0, k: screen.getBoundingClientRect().height / screen.offsetHeight };
     });
@@ -212,6 +212,54 @@
       if (age < 1.25) requestAnimationFrame(step); else parts.forEach(p => p.el.remove()); };
     requestAnimationFrame(step);
   }
+  /* ---------- Troca feita: tela cheia com as duas cartas se cruzando no meio ---------- */
+  function tradeShow({ give, get, f }, done) {
+    const ov = document.createElement('div');
+    ov.className = 'tx'; ov.setAttribute('role', 'dialog'); ov.setAttribute('aria-modal', 'true'); ov.setAttribute('aria-label', `Troca feita. ${get.name} foi pro seu álbum.`);
+    ov.innerHTML = `<i class="tx-bg"></i><i class="tx-rays"></i>
+      <span class="tx-tag tx-tag-top">${avatar(f, 26)}${f.name} dá</span><span class="tx-tag tx-tag-bot">${avatar(ME, 26)}Você dá</span>
+      <div class="tx-card tx-give">${cardHTML(give)}</div><div class="tx-card tx-get">${cardHTML(get)}<i class="tx-shine"></i></div><i class="tx-flash"></i>
+      <div class="tx-end"><h2>Troca feita!</h2><p><b>${get.name}</b> foi pro seu álbum.</p><button class="btn btn-filled tx-ok">Legal!</button></div>`;
+    screen.appendChild(ov); S.T = ov;
+    const H = screen.offsetHeight, D = Math.round(Math.min(200, H * .24)), cardH = 150 * 88 / 63 * .85;
+    $('.tx-tag-top', ov).style.top = `${Math.round(H / 2 - D - cardH / 2 - 44)}px`;
+    $('.tx-tag-bot', ov).style.top = `${Math.round(H / 2 + D + cardH / 2 + 12)}px`;
+    let closed = false;
+    const close = () => {
+      if (closed) return; closed = true; S.T = null;
+      const fade = ov.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 220, fill: 'forwards' });
+      fade.onfinish = () => ov.parentNode && ov.parentNode.removeChild(ov);
+      if (done) done();
+    };
+    $('.tx-ok', ov).addEventListener('click', close);
+    ov.addEventListener('click', e => { if (ov.classList.contains('end') && !e.target.closest('.tx-ok')) close(); });
+    S.txClose = close;
+    const T = 2700, out = 'cubic-bezier(.2, .8, .2, 1)';
+    const at = (sel, kf, opt = {}) => $(sel, ov).animate(kf, { duration: T, fill: 'both', ...opt });
+    const tf = (x, y, sc, r) => `translate(${x}px, ${y}px) scale(${sc}) rotate(${r}deg)`;
+    if (RM) {
+      at('.tx-bg', [{ opacity: 1 }, { opacity: 1 }], { duration: 1 }); $('.tx-give', ov).style.display = 'none';
+      at('.tx-get', [{ transform: tf(0, -40, 1.25, 0) }, { transform: tf(0, -40, 1.25, 0) }], { duration: 1 });
+      ov.classList.add('end'); return;
+    }
+    at('.tx-bg', [{ opacity: 0 }, { opacity: 1 }], { duration: 300 });
+    at('.tx-rays', [{ opacity: 0, transform: 'rotate(0deg) scale(.7)' }, { opacity: .5, offset: .5 }, { opacity: .75, transform: 'rotate(70deg) scale(1.15)' }], { duration: 4200, easing: 'ease-out' });
+    at('.tx-give', [
+      { transform: tf(0, D + 90, .7, -6), opacity: 0, easing: out }, { transform: tf(0, D, .85, -4), opacity: 1, offset: .15 },
+      { transform: tf(0, D, .85, -4), offset: .3, easing: 'cubic-bezier(.5, 0, .7, .4)' }, { transform: tf(-84, 0, 1, -14), offset: .47, easing: 'cubic-bezier(.3, .6, .4, 1)' },
+      { transform: tf(0, -D, .85, -4), offset: .62 }, { transform: tf(0, -D, .85, -4), offset: .72, easing: 'cubic-bezier(.5, 0, .9, .5)' },
+      { transform: tf(0, -H * .78, .6, 6), opacity: 0, offset: .88 }, { transform: tf(0, -H * .78, .6, 6), opacity: 0 }]);
+    at('.tx-get', [
+      { transform: tf(0, -D - 90, .7, 6), opacity: 0, easing: out }, { transform: tf(0, -D, .85, 4), opacity: 1, offset: .15 },
+      { transform: tf(0, -D, .85, 4), offset: .3, easing: 'cubic-bezier(.5, 0, .7, .4)' }, { transform: tf(84, 0, 1, 14), offset: .47, easing: 'cubic-bezier(.3, .6, .4, 1)' },
+      { transform: tf(0, D, .85, 4), offset: .62 }, { transform: tf(0, D, .85, 4), offset: .72, easing: 'cubic-bezier(.3, 1.35, .5, 1)' },
+      { transform: tf(0, -40, 1.3, 0), offset: .9 }, { transform: tf(0, -40, 1.25, 0) }]);
+    at('.tx-flash', [{ opacity: 0, transform: 'scale(.2)' }, { opacity: 1, transform: 'scale(4)', offset: .35 }, { opacity: 0, transform: 'scale(9)' }], { duration: 650, delay: T * .47 - 180, easing: 'ease-out' });
+    $$('.tx-tag', ov).forEach(t => t.animate([{ opacity: 0, transform: 'translateY(6px)' }, { opacity: 1, transform: 'none', offset: .3 }, { opacity: 1, offset: .75 }, { opacity: 0 }], { duration: T * .38, delay: T * .1, fill: 'both' }));
+    at('.tx-shine', [{ backgroundPosition: '160% 0', opacity: 1 }, { backgroundPosition: '-60% 0', opacity: 1 }], { duration: 900, delay: T * .9, easing: 'ease-in-out' });
+    setTimeout(() => { if (!closed) buzz(18); }, T * .47);
+    setTimeout(() => { if (closed) return; ov.classList.add('end'); buzz(30); confetti(screen.offsetWidth / 2, H / 2 - 40, 28); }, T * .88);
+  }
   function toast(msg) { const sn = $('#snack', screen); if (!sn) return; sn.innerHTML = msg; sn.classList.add('show'); clearTimeout(S.snackT); S.snackT = setTimeout(() => sn.classList.remove('show'), 3600); }
 
   /* ---------- Página de apresentação ---------- */
@@ -227,7 +275,7 @@
     S.nb = nb.dataset.nb; Object.keys(NAVBARS).forEach(k => screen.classList.toggle(`nb-${k}`, k === S.nb)); renderTabs(); buzz(6);
   });
   document.addEventListener('keydown', e => {
-    if (e.key === 'Escape') { if (S.D) closeDetail('back'); else if (S.G) closeSheet(); return; }
+    if (e.key === 'Escape') { if (S.T) { S.txClose(); return; } if (S.D) closeDetail('back'); else if (S.G) closeSheet(); return; }
     if (S.D || S.G || !S.ctrl || !S.ctrl.isOpen()) return;
     if (e.target.closest && e.target.closest('input,textarea')) return;
     if (e.key === 'ArrowRight') S.ctrl.key(1); if (e.key === 'ArrowLeft') S.ctrl.key(-1);
@@ -254,6 +302,7 @@
   window.addEventListener('resize', fit);
   // Botão voltar do Android (chamado pelo app nativo)
   window.appBack = () => {
+    if (S.T) { S.txClose(); return true; }
     if (S.D) { closeDetail('back'); return true; }
     if (S.G) { closeSheet(); return true; }
     if (S.tab === 'store') { go(S.prev); return true; }

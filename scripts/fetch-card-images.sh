@@ -16,3 +16,12 @@ for id in $ids; do
   python3 -I -c 'import sys; from PIL import Image; Image.open(sys.argv[1]).convert("RGB").save(sys.argv[2], "WEBP", quality=82, method=6)' "$tmp/${id}.png" "$out"
   echo "ok $out"
 done
+
+# Artes das capas "Pokémon" da loja (cartas Illustration Rare em alta resolução, 600px de largura)
+for id in sv3pt5-173 sv3pt5-199 sv8pt5-167 sv8pt5-161 sv3pt5-193 sv3pt5-168 sv3pt5-170 sv3pt5-166; do
+  out="cards/${id}-hi.webp"
+  [ -s "$out" ] && continue
+  curl -fsSL --retry 3 -o "$tmp/${id}-hi.png" "https://images.pokemontcg.io/${id%%-*}/${id#*-}_hires.png"
+  python3 -I -c 'import sys; from PIL import Image; im = Image.open(sys.argv[1]).convert("RGB"); im.thumbnail((600, 900)); im.save(sys.argv[2], "WEBP", quality=80, method=6)' "$tmp/${id}-hi.png" "$out"
+  echo "ok $out"
+done

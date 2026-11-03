@@ -168,7 +168,7 @@
 .screen.nb-centro .nav-item:nth-child(3) { order: 3; }
 .screen.nb-centro .nav-item:nth-child(1) .nav-ind { width: 66px; height: 76px; margin-top: -40px; margin-bottom: 6px; border-radius: 10px 18px 18px 10px; background: var(--nb-hero); border: var(--nb-hero-border); box-shadow: var(--nb-hero-shadow); color: #000; overflow: hidden; }
 .screen.nb-centro .nav-item:nth-child(1) .nav-ind::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 13px; background: var(--nb-hero-spine); border-right: 2px solid rgba(0, 0, 0, .55); }
-.screen.nb-centro .nav-item:nth-child(1) .nav-ind svg { width: 30px; height: 30px; margin-left: 10px; }
+.screen.nb-centro .nav-item:nth-child(1) .nav-ind svg { display: none; }
 .screen.nb-centro .nav-item:nth-child(1).active .nav-ind { transform: rotate(-3deg); }
 .skin-r3c.nb-centro .nav-item:nth-child(1) .nav-ind { border-radius: 10px 18px 18px 10px; }
 

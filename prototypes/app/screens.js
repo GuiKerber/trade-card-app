@@ -2,28 +2,47 @@
 const cap = s => s[0].toUpperCase() + s.slice(1);
 const offerTile = ({ f, c }) => `<button class="otile" data-offer="${f.id}:${c.n}" aria-label="${c.name}, de ${f.name}${c.have ? '' : ', falta pra você'}">${thumb(c)}${c.have ? '' : '<span class="need">Falta</span>'}<span class="oby">${avatar(f, 22)}${f.name}</span></button>`;
 
-/* ---------- Pedido de troca ---------- */
+/* ---------- Pedido de troca (em etapas: carta → onde → quando → confirmar) ---------- */
 function proposeSheet(api, fid, n) {
-  const f = friendById(fid), get = byN(n), st = { give: null, where: null, day: null, per: null };
-  const html = () => {
-    const mine = DATA.filter(c => c.have && c.trade), ready = st.give && st.where && st.day && st.per;
-    return `<div class="sh-handle"></div><h2 class="sh-title" id="shTitle">Trocar com ${f.name}</h2>
-      <div class="ps-swap"><figure>${thumb(get)}<figcaption>Você recebe</figcaption></figure><span class="swap-ico">${ico('trade', 26)}</span><figure>${st.give ? thumb(byN(st.give)) : '<span class="mini empty">?</span>'}<figcaption>Você dá</figcaption></figure></div>
-      <h3 class="ps-h">1. Escolha uma carta sua</h3>
-      ${mine.length ? `<div class="ps-mine">${mine.map(c => `<button class="ps-card" data-act="give:${c.n}" aria-pressed="${st.give === c.n}">${thumb(c, 'sm')}<span>${c.name}</span></button>`).join('')}</div>`
-        : '<p class="ps-empty">Você ainda não pôs cartas pra troca. No álbum, toque numa carta e escolha <b>Pôr pra troca</b>.</p>'}
-      <h3 class="ps-h">2. Onde</h3><div class="chips">${Object.entries(PLACES).map(([k, l]) => `<button class="fchip" data-act="where:${k}" aria-pressed="${st.where === k}">${l}</button>`).join('')}</div>
-      <h3 class="ps-h">3. Quando</h3><div class="chips">${DAYS.map(d => `<button class="fchip" data-act="day:${d}" aria-pressed="${st.day === d}">${d}</button>`).join('')}</div>
-      <div class="chips">${PERIODS.map(p => `<button class="fchip" data-act="per:${p}" aria-pressed="${st.per === p}">De ${p}</button>`).join('')}</div>
-      <div class="sh-actions"><button class="btn btn-filled" data-act="send"${ready ? '' : ' disabled'}>Enviar pedido</button></div>
+  const f = friendById(fid), get = byN(n), st = { step: 1, give: null, where: null, day: null, anim: '', busy: false };
+  const next = () => (!st.give ? 1 : !st.where ? 2 : !st.day ? 3 : 4);
+  const body = () => {
+    if (st.step === 1) {
+      const mine = DATA.filter(c => c.have && c.trade);
+      return `<h3 class="ps-q">Qual carta sua você dá?</h3>${mine.length
+        ? `<div class="ps-grid">${mine.map(c => `<button class="ps-card" data-act="give:${c.n}" aria-pressed="${st.give === c.n}">${thumb(c)}<span>${c.name}</span></button>`).join('')}</div>`
+        : '<p class="ps-empty">Você ainda não pôs cartas pra troca. No álbum, toque numa carta e escolha <b>Pôr pra troca</b>.</p>'}`;
+    }
+    if (st.step === 2) return `<h3 class="ps-q">Onde vocês vão se encontrar?</h3><div class="ps-opts">${Object.entries(PLACES).map(([k, l]) => `<button class="ps-opt" data-act="where:${k}" aria-pressed="${st.where === k}"><span class="ps-oi">${ico(k, 26)}</span>${l}</button>`).join('')}</div>`;
+    if (st.step === 3) return `<h3 class="ps-q">Que dia?</h3><div class="ps-opts">${DAYS.map(d => `<button class="ps-opt" data-act="day:${d}" aria-pressed="${st.day === d}"><span class="ps-oi">${ico('cal', 26)}</span>${d}</button>`).join('')}</div>`;
+    return `<h3 class="ps-q">Tudo certo?</h3>
+      <div class="ps-sum"><button class="ps-row" data-act="go:2"><span class="ps-oi">${ico(st.where, 24)}</span><span><small>Onde</small><b>${PLACES[st.where]}</b></span><em>Mudar</em></button>
+        <button class="ps-row" data-act="go:3"><span class="ps-oi">${ico('cal', 24)}</span><span><small>Quando</small><b>${st.day}</b></span><em>Mudar</em></button></div>
+      <div class="sh-actions"><button class="btn btn-filled" data-act="send">Enviar pedido</button></div>
       <p class="ps-note">${ico('shield', 16)} Um adulto recebe um aviso para confirmar o encontro.</p>`;
   };
-  api.openSheet(html(), (act, sheet) => {
+  const html = () => {
+    const a = st.anim; st.anim = '';
+    return `<div class="sh-handle"></div>
+      <div class="ps-top">${st.step > 1 ? `<button class="ps-back" data-act="back" aria-label="Voltar">${ico('back', 22)}</button>` : ''}<h2 class="sh-title" id="shTitle">Trocar com ${f.name}</h2></div>
+      <div class="ps-prog" role="progressbar" aria-label="Passo ${Math.min(st.step, 3)} de 3" aria-valuemin="1" aria-valuemax="3" aria-valuenow="${Math.min(st.step, 3)}">${[1, 2, 3].map(i => `<i class="${i < st.step ? 'done' : i === st.step ? 'on' : ''}"></i>`).join('')}</div>
+      <div class="ps-swap"><figure>${thumb(get)}<figcaption>Você recebe</figcaption></figure><span class="swap-ico">${ico('trade', 26)}</span>
+        <figure>${st.give ? `<button class="ps-mine-pick" data-act="go:1" aria-label="Trocar a carta que você dá">${thumb(byN(st.give))}</button>` : '<span class="mini empty">?</span>'}<figcaption>Você dá</figcaption></figure></div>
+      <div class="ps-body${a ? ` in-${a}` : ''}">${body()}</div>`;
+  };
+  const go = (step, dir) => { st.step = step; st.anim = dir; sheet.set(html()); };
+  const sheet = api.openSheet(html(), (act, sh) => {
+    if (st.busy) return;
     const [k, v] = act.split(':');
-    if (k === 'give') st.give = +v; else if (k === 'where') st.where = v; else if (k === 'day') st.day = v; else if (k === 'per') st.per = v;
-    if (k !== 'send') { buzz(4); sheet.set(html()); return; }
-    REQS.push({ id: Date.now(), friend: fid, give: st.give, get: n, where: st.where, when: `${st.day} · ${st.per}`, status: 'out' });
-    api.closeSheet(); api.toast(`Pedido enviado para ${f.name}! Veja em Pedidos.`); api.refresh();
+    if (k === 'back') { go(st.step - 1, 'b'); buzz(4); return; }
+    if (k === 'go') { go(+v, 'b'); buzz(4); return; }
+    if (k === 'send') {
+      REQS.push({ id: Date.now(), friend: fid, give: st.give, get: n, where: st.where, when: st.day, status: 'out' });
+      api.closeSheet(); api.toast(`Pedido enviado para ${f.name}! Veja em Pedidos.`); api.refresh(); return;
+    }
+    if (k === 'give') st.give = +v; else if (k === 'where') st.where = v; else if (k === 'day') st.day = v; else return;
+    buzz(6); sh.set(html()); st.busy = true;
+    setTimeout(() => { st.busy = false; if (api.sheetIs(sheet)) go(next(), 'f'); }, 260);
   });
 }
 
@@ -54,7 +73,7 @@ function mountTrades(stage, api) {
       : r.status === 'ok' ? `<button class="btn-s ghost" data-rq="cancel:${r.id}">Desmarcar</button><button class="btn-s" data-rq="done:${r.id}">Já trocamos</button>`
         : `<button class="btn-s ghost" data-rq="cancel:${r.id}">Cancelar pedido</button>`;
     return `<article class="rq rq-${r.status}"><header>${avatar(f, 32)}<b>${title}</b></header>
-      <div class="rq-swap"><figure>${thumb(give, 'sm')}<figcaption>Você dá<b>${give.name}</b></figcaption></figure><span class="swap-ico">${ico('trade', 22)}</span><figure>${thumb(get, 'sm')}<figcaption>Você recebe<b>${get.name}</b></figcaption></figure></div>
+      <div class="rq-swap"><figure>${thumb(give)}<figcaption>Você dá<b>${give.name}</b></figcaption></figure><span class="swap-ico">${ico('trade', 22)}</span><figure>${thumb(get)}<figcaption>Você recebe<b>${get.name}</b></figcaption></figure></div>
       <p class="rq-when">${ico('pin', 18)} ${PLACES[r.where]} · ${r.when}</p><div class="rq-act">${acts}</div></article>`;
   };
   const body = () => {
@@ -100,8 +119,7 @@ function mountTrades(stage, api) {
       f.offers = f.offers.filter(x => x !== get.n);
       if (!give.have) albumRemove(give.n); albumPlace(get.n);
       REQS.splice(REQS.indexOf(rq), 1);
-      const rect = api.rectIn(stage); api.confetti(rect.x + rect.w / 2, rect.y + 200, 24);
-      api.toast(`${get.name} foi pro seu álbum!`); api.counter();
+      api.counter(); api.tradeShow({ give, get, f });
     }
     render();
   });
@@ -175,15 +193,15 @@ function gateSheet(api, item, onOk) {
 const STORE_UI = { tab: 'capas', sel: -1 };
 function mountStore(stage, api) {
   stage.className = 'stage page';
-  const skinTile = k => `<button class="sitem${COVER.skin === k.id ? ' on' : ''}" data-skin="${k.id}"><span class="sw" style="--f1:${k.f[0]};--f2:${k.f[1]};--f3:${k.f[2]};--f4:${k.f[3]};--f5:${k.f[4]};--spine:${k.spine}"><i></i></span><b>${k.name}</b><em>${COVER.skin === k.id ? 'Usando' : k.owned ? 'Usar' : `${ico('lock', 14)} ${priceStr(k.price)}`}</em></button>`;
+  const skinTile = k => `<button class="sitem${COVER.skin === k.id ? ' on' : ''}" data-skin="${k.id}"><span class="sw${k.art ? ' art' : ''}" style="--f1:${k.f[0]};--f2:${k.f[1]};--f3:${k.f[2]};--f4:${k.f[3]};--f5:${k.f[4]};--spine:${k.spine}${k.art ? `;--art:url('${artSrc(k.art)}')${k.crop ? `;--art-zoom:${k.crop[0]};--art-pos:${k.crop[1]}` : ''}` : ''}"><i></i></span><b>${k.name}</b><em>${COVER.skin === k.id ? 'Usando' : k.owned ? 'Usar' : `${ico('lock', 14)} ${priceStr(k.price)}`}</em></button>`;
   const stkTile = s => { const n = COVER.stickers.filter(x => x.id === s.id).length; return `<button class="sitem" data-stk="${s.id}"><span class="sa">${sticker(s.icon, 50, s.fill)}</span><b>${s.name}</b><em>${s.owned ? (n ? `Na capa · colar outro` : 'Colar na capa') : `${ico('lock', 14)} ${priceStr(s.price)}`}</em></button>`; };
   const render = () => {
     const selOn = STORE_UI.sel >= 0 && STORE_UI.sel < COVER.stickers.length;
     stage.innerHTML = `<div class="pg st"><div class="pg-body">
       <div class="st-prev"><div class="st-box"><i class="st-spine"></i><div class="st-cover" id="stc">${coverFaceHTML()}</div></div>
         <div class="st-tools">${selOn ? `<button class="btn-s ghost" data-rm>${ico('x', 16)} Tirar adesivo</button>` : `<p class="st-hint">${STORE_UI.tab === 'adesivos' ? 'Arraste os adesivos na capa.' : 'Toque numa capa para provar.'}</p>`}</div></div>
-      <div class="segin" role="tablist" aria-label="Loja">${[['capas', 'Capas · 10'], ['adesivos', 'Adesivos · 10']].map(([k, l]) => `<button role="tab" data-st="${k}" aria-selected="${k === STORE_UI.tab}">${l}</button>`).join('')}</div>
-      <div class="sgrid">${STORE_UI.tab === 'capas' ? SKINS.map(skinTile).join('') : STICKERS.map(stkTile).join('')}</div>
+      <div class="segin" role="tablist" aria-label="Loja">${[['capas', `Capas · ${SKINS.length}`], ['adesivos', `Adesivos · ${STICKERS.length}`]].map(([k, l]) => `<button role="tab" data-st="${k}" aria-selected="${k === STORE_UI.tab}">${l}</button>`).join('')}</div>
+      <div class="sgrid">${STORE_UI.tab === 'capas' ? `<h3 class="pg-h sg-h">Pokémon</h3>${SKINS.filter(k => k.art).map(skinTile).join('')}<h3 class="pg-h sg-h">Holográficas</h3>${SKINS.filter(k => !k.art).map(skinTile).join('')}` : STICKERS.map(stkTile).join('')}</div>
     </div></div>`;
     applySkin($('.st-box', stage));
     if (selOn) $(`#stc [data-si="${STORE_UI.sel}"]`, stage).classList.add('sel');
