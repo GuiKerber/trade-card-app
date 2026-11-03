@@ -4,13 +4,14 @@
   const W = 384, H = 820;
   const DEVICE = document.body.classList.contains('device-mode');
   const S = { tab: 'album', prev: 'album', ctrl: null, open: false, title: '', D: null, G: null, snackT: 0, lang: 'PT', nb: 'centro' };
-  const NAV = [['album', 'album', 'Álbum'], ['trade', 'trade', 'Trocas'], ['friends', 'friends', 'Amigos'], ['game', 'trofeu', 'Conquistas']];
+  const NAV = [['album', 'album', 'Álbum'], ['trade', 'trade', 'Trocas'], ['friends', 'friends', 'Amigos'], ['game', 'trofeu', 'Conquistas'], ['store', 'bag', 'Loja']];
   const NAVBARS = { centro: 'Centro (escolhida)', padrao: 'Padrão', pilula: 'Pílula', abas: 'Abas', adesivo: 'Adesivos' };
   const TAB_NOTES = {
     album: { t: 'Álbum', p: 'A criança decide a ordem: segura uma carta e arrasta para outro bolso, inclusive em outra folha (é só levar a carta até a borda). Bolso livre serve para guardar carta nova. O álbum é infinito, sempre com uma folha nova no fim.', try: ['Abra o álbum, segure a Charmander e solte no bolso da Bulbasaur: elas trocam de lugar.', 'Segure uma carta e leve até a borda direita para carregar para a próxima folha.', 'Toque num bolso livre e guarde a Venusaur ex.', 'Toque no Pikachu e use <b>Pôr pra troca</b>.'] },
     trade: { t: 'Trocas', p: 'Três abas: <b>Ofertas</b> mostra o que os amigos puseram pra troca (as que faltam no seu álbum vêm primeiro), <b>Procurar</b> busca uma carta pelo nome ou número, e <b>Pedidos</b> guarda os pedidos novos, as trocas combinadas e as enviadas.', try: ['Em Ofertas, toque na Venusaur ex de Theo, escolha uma carta sua, o lugar e o dia.', 'Em Pedidos, aceite o pedido de Bia e depois toque em <b>Já trocamos</b>: a Gengar entra no seu álbum.', 'Em Procurar, digite “char” ou “199”.'] },
     friends: { t: 'Amigos', p: 'O seu código (e o QR Code) e a lista de amigos. Amigos só entram pessoalmente e com aprovação de um adulto. Não tem chat.', try: ['Toque em <b>Adicionar amigo</b> e digite NUVEM-357.', 'Abra um amigo para ver as cartas que ele pôs pra troca.'] },
-    game: { t: 'Conquistas', p: '<b>Ranking</b> de trocas só entre amigos, <b>Insígnias</b> a cada marco de trocas (10 Pedra, 25 Água, 50 Raio...) e a <b>Loja</b> com capas holográficas, capas com arte de Pokémon e adesivos. Itens pagos pedem um adulto antes.', try: ['Em Trocas › Pedidos, toque em <b>Já trocamos</b> na troca com Theo: é a 10ª troca e a insígnia Pedra aparece.', 'Em Insígnias, toque na Água para ver quanto falta.', 'Na Loja, prove a capa Pikachu (pede um adulto).'] },
+    game: { t: 'Conquistas', p: '<b>Ranking</b> de trocas só entre amigos e <b>Insígnias</b> a cada marco de trocas (10 Pedra, 25 Água, 50 Raio...).', try: ['Em Trocas › Pedidos, toque em <b>Já trocamos</b> na troca com Theo: é a 10ª troca e a insígnia Pedra aparece.', 'Em Insígnias, toque na Água para ver quanto falta.'] },
+    store: { t: 'Loja', p: '18 capas (8 com arte de Pokémon e 10 holográficas) e 10 adesivos para colar na capa do álbum. Itens pagos pedem um adulto antes. Nada é cobrado no protótipo.', try: ['Toque na capa Pikachu e responda a pergunta do adulto.', 'Em Adesivos, toque em Chama e arraste o adesivo na capa.'] },
     account: { t: 'Sua conta', p: 'O avatar no topo abre a conta: apelido, cor, código de amigo, email e a área dos pais. Sair leva de volta para a tela de entrada.', try: ['Toque em <b>Sair da conta</b> e entre de novo com email ou Google.', 'Crie uma conta nova escolhendo uma idade abaixo de 13 anos para ver a parte do adulto.'] },
   };
 
@@ -29,7 +30,7 @@
       <div class="scrim" id="scrim"></div>
       <div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="shTitle"></div>
       <div class="snack" id="snack" role="status"></div>`;
-    $('.navbar', screen).addEventListener('click', e => { const b = e.target.closest('[data-tab]'); if (b) go(b.dataset.tab); });
+    $('.navbar', screen).addEventListener('click', e => { const b = e.target.closest('[data-tab]'); if (!b) return; if (e.detail) b.blur(); go(b.dataset.tab); });
     $('#scrim', screen).addEventListener('click', () => (S.D ? closeDetail('back') : closeSheet()));
     $('#sheet', screen).addEventListener('click', onSheetClick);
     sheetDrag($('#sheet', screen));
@@ -44,7 +45,7 @@
     const ab = $('#appbar', screen); if (!ab) return;
     const back = label => `<button class="icon-btn" id="abBack" aria-label="${label}">${ico('back', 24)}</button>`;
     const me = `<button class="me-btn" id="abMe" aria-label="Sua conta">${avatar(ME, 40)}</button>`;
-    let lead = '', title = { album: `Oi, ${ME.name}!`, trade: 'Trocas', friends: 'Amigos', game: 'Conquistas' }[S.tab], end = me;
+    let lead = '', title = { album: `Oi, ${ME.name}!`, trade: 'Trocas', friends: 'Amigos', game: 'Conquistas', store: 'Loja' }[S.tab], end = me;
     if (S.tab === 'account') { lead = back('Voltar'); title = 'Sua conta'; end = ''; }
     else if (S.tab === 'album' && S.open) { lead = back('Fechar o álbum'); title = S.title; }
     ab.innerHTML = `${lead}<div class="ab-title">${title}</div>${end}`;
@@ -61,7 +62,7 @@
     const stage = $('#stage', screen);
     const fresh = stage.cloneNode(false); stage.replaceWith(fresh); fresh.removeAttribute('style');
     if (S.tab === 'album') { S.ctrl = mountAlbum(fresh, api); applySkin(fresh); }
-    else S.ctrl = { trade: mountTrades, friends: mountFriends, game: mountGame, account: mountAccount }[S.tab](fresh, api);
+    else S.ctrl = { trade: mountTrades, friends: mountFriends, game: mountGame, store: mountStore, account: mountAccount }[S.tab](fresh, api);
     renderAppbar(); renderNav(); if (!DEVICE) renderNotes();
   }
   const api = {
@@ -274,7 +275,7 @@
   }
   function renderNotes() {
     const n = TAB_NOTES[S.tab];
-    $('#notes').innerHTML = `<div class="ncard"><div class="n-top"><span class="n-num">${ico({ album: 'album', trade: 'trade', friends: 'friends', game: 'trofeu', account: 'friends' }[S.tab], 26)}</span><div><h2>${n.t}</h2><p class="n-tag">Tela atual do protótipo</p></div></div><p>${n.p}</p><h3>Experimente</h3><ol>${n.try.map(x => `<li>${x}</li>`).join('')}</ol></div>`;
+    $('#notes').innerHTML = `<div class="ncard"><div class="n-top"><span class="n-num">${ico({ album: 'album', trade: 'trade', friends: 'friends', game: 'trofeu', store: 'bag', account: 'friends' }[S.tab], 26)}</span><div><h2>${n.t}</h2><p class="n-tag">Tela atual do protótipo</p></div></div><p>${n.p}</p><h3>Experimente</h3><ol>${n.try.map(x => `<li>${x}</li>`).join('')}</ol></div>`;
   }
   document.addEventListener('click', e => {
     const nb = e.target.closest('#segs [data-nb]'); if (!nb) return;

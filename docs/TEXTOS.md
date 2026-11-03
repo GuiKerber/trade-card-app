@@ -39,10 +39,10 @@ Primeira versão de todos os textos da interface, para crianças de 6 a 12 anos 
 
 | Lugar | Texto |
 |---|---|
-| Barra de navegação (Centro) | Trocas · Amigos · **Álbum** (mini fichário no meio, sem ícone dentro) · Conquistas |
+| Barra de navegação (Centro) | Trocas · Amigos · **Álbum** (mini fichário no meio, sem ícone dentro) · Conquistas · Loja |
 | Botão do topo direito | Avatar com a inicial (acessibilidade: Sua conta) |
 | Título da home | Oi, Lia! (o apelido escolhido na conta) |
-| Títulos das telas | Trocas · Amigos · Conquistas · Sua conta · Folha 1 |
+| Títulos das telas | Trocas · Amigos · Conquistas · Loja · Sua conta · Folha 1 |
 | Contador | Não existe: o álbum é infinito, sem total de cartas |
 | Voltar (acessibilidade) | Fechar o álbum · Voltar |
 
@@ -219,7 +219,7 @@ Uma pergunta por vez. Ao tocar numa opção, o pedido avança sozinho; a barra d
 
 | Elemento | Texto |
 |---|---|
-| Abas | Ranking · Insígnias · Loja |
+| Abas | Ranking · Insígnias |
 | Resumo | 9 trocas feitas · Próxima insígnia · Pedra · 9 de 10 · falta 1 troca |
 | Ranking | Quem mais trocou · 1º · Theo · Insígnia Água · 31 trocas · Lia (você) · Sem insígnia ainda |
 | Segurança | O ranking mostra só você e seus amigos. |
@@ -230,7 +230,7 @@ Uma pergunta por vez. Ao tocar numa opção, o pedido avança sozinho; a barra d
 
 **Insígnias:** Pedra (10 trocas), Água (25), Raio (50), Planta (75), Psíquica (100), Fogo (150), Terra (200), Dragão (300).
 
-## Loja (aba de Conquistas)
+## Loja (último item da barra)
 
 | Elemento | Texto |
 |---|---|

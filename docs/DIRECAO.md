@@ -11,7 +11,7 @@ Protótipo: [`prototypes/round3/index.html`](../prototypes/round3/index.html), n
 
 ## Interface
 - **Topo:** título à esquerda ("Oi, Lia!", ou voltar + título) e o **avatar** da criança à direita, que abre **Sua conta**. Não há contador de cartas.
-- **Navegação:** barra **Centro** com 4 destinos: Trocas e Amigos à esquerda, **Álbum** no centro (mini fichário holográfico que salta da barra, liso, sem ícone dentro) e **Conquistas** à direita.
+- **Navegação:** barra **Centro** com 5 destinos: Trocas e Amigos à esquerda, **Álbum** no centro (mini fichário holográfico que salta da barra, liso, sem ícone dentro), Conquistas e **Loja** (último lugar) à direita.
 - **Material:** vinil fofinho, com gradiente sutil de cima para baixo, contorno preto de 2dp e degrau roxo-escuro (#2A1A7A) no lugar de sombra.
 - **Holo só onde há ação:** item ativo da navegação, botão principal, botão Loja e borda do sheet. O gradiente é `#FFB3D9 → #D9B8FF → #A9DCFF → #B4F5DC → #FFF0A8` e se desloca com o toque.
 - **Fundo:** lilás-claro (#F1ECFF → #E3EDFF), com manchas suaves de rosa, azul e menta.
@@ -29,10 +29,12 @@ Protótipo: [`prototypes/round3/index.html`](../prototypes/round3/index.html), n
 - **Já trocamos:** abre uma tela cheia escura com raios holográficos. A sua carta começa embaixo e a do amigo em cima; as duas se cruzam no meio com um clarão, a sua sai pelo topo e a nova cresce no centro com brilho. Depois vem "Troca feita!", o progresso da próxima insígnia (ou a insígnia nova) e confete. Com "remover animações", aparece direto o resultado.
 
 ## Conquistas
-- Três abas: **Ranking**, **Insígnias** e **Loja**.
+- Duas abas: **Ranking** e **Insígnias**.
 - **Ranking:** pódio com os 3 que mais trocaram e a lista completa. Só aparecem a criança e os amigos dela, nunca desconhecidos.
 - **Insígnias:** uma a cada marco de trocas: Pedra (10), Água (25), Raio (50), Planta (75), Psíquica (100), Fogo (150), Terra (200) e Dragão (300). São desenhos originais: uma forma por tipo (hexágono, gota, estrela, flor, círculo, chama, escudo e losango) com o ícone do tipo, contorno preto e degrau roxo. As bloqueadas ficam cinza com cadeado, e a próxima tem borda tracejada e barra de progresso.
-- **Loja:** a mesma loja de antes, agora dentro de Conquistas. Tem 18 capas (8 com **arte inteira de Pokémon**, recortada de cartas Illustration Rare sem o texto, e 10 holográficas) e 10 adesivos.
+
+## Loja
+- Último item da barra. Tem 18 capas (8 com **arte inteira de Pokémon**, recortada de cartas Illustration Rare sem o texto, e 10 holográficas) e 10 adesivos. Itens pagos pedem um adulto antes.
 
 ## Conta e login
 - **Boas-vindas:** leque com 3 cartas, o nome **Meu Álbum** (provisório), **Continuar com Google**, **Entrar com email** e **Criar conta**.

@@ -246,15 +246,20 @@
 .sgrid .sg-h { grid-column: 1 / -1; margin: 6px 0 -2px; }
 .sgrid .sg-h:first-child { margin-top: 0; }
 
-/* Barra com 4 destinos: Trocas e Amigos à esquerda, Álbum no centro, Conquistas à direita */
-.screen .navbar { grid-template-columns: repeat(4, 1fr); }
-.screen.nb-centro .navbar { grid-template-columns: 1fr 1fr 100px 2fr; }
+/* Barra com 5 destinos: Trocas e Amigos à esquerda, Álbum no centro, Conquistas e Loja à direita */
+.screen .navbar { grid-template-columns: repeat(5, 1fr); }
+.screen.nb-centro .navbar { grid-template-columns: 1fr 1fr 88px 1fr 1fr; }
 .screen.nb-centro .nav-item:nth-child(1) { order: 3; }
 .screen.nb-centro .nav-item:nth-child(2) { order: 1; }
 .screen.nb-centro .nav-item:nth-child(3) { order: 2; }
 .screen.nb-centro .nav-item:nth-child(4) { order: 4; }
+.screen.nb-centro .nav-item:nth-child(5) { order: 5; }
 .screen.nb-abas .nav-item:nth-child(4) { background: var(--nb-t1); }
-.nav-lb { white-space: nowrap; }
+.screen.nb-abas .nav-item:nth-child(5) { background: var(--nb-t2); }
+.screen .nav-lb { white-space: nowrap; font-size: 12.5px; letter-spacing: 0; }
+.screen .nav-item .nav-ind { max-width: 100%; }
+.nav-item:focus-visible { outline: none; }
+.nav-item:focus-visible .nav-ind { outline: 3px solid var(--primary); outline-offset: 3px; }
 
 /* Avatar no topo (abre a conta) */
 .me-btn { flex: none; display: grid; place-items: center; width: 48px; height: 48px; padding: 0; border: 0; border-radius: 50%; background: none; cursor: pointer; }

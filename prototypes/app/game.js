@@ -1,4 +1,4 @@
-/* Conquistas: ranking de trocas entre amigos, insígnias por número de trocas e a loja */
+/* Conquistas: ranking de trocas entre amigos e insígnias por número de trocas */
 
 Object.assign(IC, {
   rocha: '<path d="M4.5 17.5 7 9l6-3.8 6 4.3 1 8z"/><path d="M7 9l5 3.2 1-7M12 12.2l-2 5.3M12 12.2l7.8-2.4" fill="none"/>',
@@ -51,12 +51,11 @@ function badgeSVG(b, size = 64, on = true) {
 
 const GAME_UI = { tab: 'ranking' };
 function mountGame(stage, api) {
-  const seg = `<div class="segin" role="tablist" aria-label="Conquistas">${[['ranking', 'Ranking'], ['insignias', 'Insígnias'], ['loja', 'Loja']].map(([k, l]) => `<button role="tab" data-gt="${k}" aria-selected="${k === GAME_UI.tab}">${l}</button>`).join('')}</div>`;
+  const seg = `<div class="segin" role="tablist" aria-label="Conquistas">${[['ranking', 'Ranking'], ['insignias', 'Insígnias']].map(([k, l]) => `<button role="tab" data-gt="${k}" aria-selected="${k === GAME_UI.tab}">${l}</button>`).join('')}</div>`;
   stage.addEventListener('click', e => {
     const t = e.target.closest('[data-gt]'); if (!t) return;
     if (t.dataset.gt !== GAME_UI.tab) { GAME_UI.tab = t.dataset.gt; buzz(4); api.remount(); }
   });
-  if (GAME_UI.tab === 'loja') return mountStore(stage, api, seg);
   stage.className = 'stage page';
 
   const next = nextBadge(ME.trades), have = badgeOf(ME.trades), prev = have ? have.need : 0;
