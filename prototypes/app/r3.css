@@ -168,11 +168,11 @@
 .screen.nb-centro .nav-item:nth-child(1) { order: 2; }
 .screen.nb-centro .nav-item:nth-child(2) { order: 1; }
 .screen.nb-centro .nav-item:nth-child(3) { order: 3; }
-.screen.nb-centro .nav-item:nth-child(1) .nav-ind { width: 66px; height: 76px; margin-top: -40px; margin-bottom: 6px; border-radius: 10px 18px 18px 10px; background: var(--nb-hero); border: var(--nb-hero-border); box-shadow: var(--nb-hero-shadow); color: #000; overflow: hidden; }
-.screen.nb-centro .nav-item:nth-child(1) .nav-ind::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 13px; background: var(--nb-hero-spine); border-right: 2px solid rgba(0, 0, 0, .55); }
+.screen.nb-centro .nav-item:nth-child(1) .nav-ind { width: 50px; height: 58px; margin-top: -25px; margin-bottom: 3px; border-radius: 8px 14px 14px 8px; background: var(--nb-hero); border: var(--nb-hero-border); box-shadow: var(--nb-hero-shadow); color: #000; overflow: hidden; }
+.screen.nb-centro .nav-item:nth-child(1) .nav-ind::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 10px; background: var(--nb-hero-spine); border-right: 2px solid rgba(0, 0, 0, .55); }
 .screen.nb-centro .nav-item:nth-child(1) .nav-ind svg { display: none; }
 .screen.nb-centro .nav-item:nth-child(1).active .nav-ind { transform: rotate(-3deg); }
-.skin-r3c.nb-centro .nav-item:nth-child(1) .nav-ind { border-radius: 10px 18px 18px 10px; }
+.skin-r3c.nb-centro .nav-item:nth-child(1) .nav-ind { border-radius: 8px 14px 14px 8px; }
 
 /* 4 · Abas de fichário: cada destino é uma aba de divisória; a ativa sobe */
 .screen.nb-abas .navbar { background: transparent; border: 0; box-shadow: none; align-items: end; padding: 0 12px; gap: 8px; }
@@ -245,5 +245,5 @@
 .skin-r3d .stamp { background: var(--holo); box-shadow: 0 3px 0 #2a1a7a; }
 .skin-r3d { --nb-bg: linear-gradient(180deg, #fff, #f1ebff); --nb-border: 2px solid #000; --nb-shadow: 0 4px 0 #2a1a7a, 0 12px 22px -12px rgba(60, 30, 120, .45);
   --nb-ind: linear-gradient(180deg, rgba(255, 255, 255, .6), rgba(255, 255, 255, 0) 55%), linear-gradient(115deg, #ffb3d9, #d9b8ff, #a9dcff, #b4f5dc, #fff0a8); --nb-ind-border: 2px solid #000; --nb-ind-shadow: 0 2px 0 #2a1a7a;
-  --nb-hero: radial-gradient(55% 34% at 30% 15%, rgba(255, 255, 255, .8), transparent 62%), linear-gradient(125deg, #ffc8e6, #e3c8ff 25%, #bfe2ff 50%, #c4f5e4 75%, #fff0b8); --nb-hero-spine: linear-gradient(90deg, #8b74e0, #d9c9ff 40%, #7d66d8); --nb-hero-border: 2px solid #000; --nb-hero-shadow: 0 5px 0 #2a1a7a, inset 4px 5px 10px rgba(255, 255, 255, .5);
+  --nb-hero: radial-gradient(55% 34% at 30% 15%, rgba(255, 255, 255, .8), transparent 62%), linear-gradient(125deg, #ffc8e6, #e3c8ff 25%, #bfe2ff 50%, #c4f5e4 75%, #fff0b8); --nb-hero-spine: linear-gradient(90deg, #8b74e0, #d9c9ff 40%, #7d66d8); --nb-hero-border: 2px solid #000; --nb-hero-shadow: 0 3px 0 #2a1a7a, inset 3px 4px 8px rgba(255, 255, 255, .5);
   --nb-rail: linear-gradient(180deg, #2f2650, #120d24); --nb-t1: linear-gradient(160deg, #ffe0f0, #ffc8e6); --nb-t2: linear-gradient(160deg, #e0f2ff, #bfe2ff); --nb-t3: linear-gradient(160deg, #e2fbf1, #c4f5e4); --nb-tab-border: 2px solid #000; --nb-stk-ring: 0 0 0 4px #fff, 0 0 0 6.5px #000; }
